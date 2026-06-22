@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="SpineStrong" />
+<meta name="theme-color" content="#0F1115" />
+<link rel="manifest" href="manifest.json" />
+<link rel="apple-touch-icon" href="icon-180.png" />
+<title>SpineStrong</title>
+<style>
+  :root {
+    --bg: #0F1115;
+    --card: #1A1D23;
+    --border: #2A2D35;
+    --muted: #6B7280;
+    --text: #E8EAF0;
+    --accent: #D4F34A;
+    --warn: #F59E0B;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    padding: env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 24px) 16px;
+    max-width: 520px; margin: 0 auto;
+  }
+  header { padding: 20px 0 16px; }
+  .logo {
+    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); font-weight: 700;
+  }
+  h1 { font-size: 22px; margin: 4px 0 2px; font-weight: 600; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 16px; margin-bottom: 14px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; }
+  .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .row label { flex: 1; font-size: 14px; }
+  input[type="text"], input[type="number"], select {
+    background: #12151B; border: 1px solid var(--border); color: var(--text);
+    border-radius: 9px; padding: 11px 12px; font-size: 16px; font-family: inherit;
+    width: 100%;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--accent); }
+  .weight-input { width: 90px; text-align: center; }
+  .btn {
+    background: var(--accent); color: #0F1115; border: none;
+    border-radius: 10px; padding: 13px 16px; font-size: 15px; font-weight: 700;
+    font-family: inherit; cursor: pointer; width: 100%;
+  }
+  .btn:active { opacity: 0.85; }
+  .btn-ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+  }
+  .btn-row { display: flex; gap: 10px; }
+  .log-entry {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .log-entry:last-child { border-bottom: none; }
+  .log-entry .ex { font-weight: 500; }
+  .log-entry .meta { color: var(--muted); font-size: 12px; }
+  .log-entry .wt { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 18px 0; }
+  .backup-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
+  .toast {
+    position: fixed; bottom: calc(env(safe-area-inset-bottom) + 20px); left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--accent); color: #0F1115; padding: 12px 20px;
+    border-radius: 30px; font-weight: 700; font-size: 14px;
+    transition: transform 0.3s; z-index: 100; opacity: 0;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .install-tip {
+    background: #1E2230; border: 1px solid var(--accent); border-radius: 12px;
+    padding: 12px 14px; font-size: 13px; margin-bottom: 14px; line-height: 1.5;
+  }
+  .install-tip b { color: var(--accent); }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">SpineStrong</div>
+  <h1>Today's Log</h1>
+  <p class="sub">Minimal test build — log a weight, then close and reopen to confirm it stuck.</p>
+</header>
+
+<div id="installTip" class="install-tip" style="display:none;">
+  <b>Install me:</b> tap the Share icon in Safari, then <b>Add to Home Screen</b>. Open from the home-screen icon after that.
+</div>
+
+<div class="card">
+  <h2>Log a set</h2>
+  <div class="row">
+    <select id="exercise">
+      <option value="Lat Pulldown">Lat Pulldown</option>
+      <option value="Seated Cable Row">Seated Cable Row</option>
+      <option value="Chest Press">Chest Press</option>
+      <option value="Shoulder Press">Shoulder Press</option>
+    </select>
+  </div>
+  <div class="row">
+    <input type="number" id="weight" class="weight-input" placeholder="lbs" inputmode="numeric" />
+    <input type="number" id="reps" class="weight-input" placeholder="reps" inputmode="numeric" />
+    <button class="btn" style="flex:1;" onclick="logSet()">Log</button>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Logged today</h2>
+  <div id="logList"><div class="empty">Nothing logged yet.</div></div>
+</div>
+
+<div class="card">
+  <h2>Your data</h2>
+  <div class="btn-row">
+    <button class="btn btn-ghost" onclick="exportData()">Export backup</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">Import</button>
+  </div>
+  <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)" />
+  <div class="backup-note" id="backupNote">No backups yet.</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+  const KEY = "spinestrong_log_v1";
+  const BACKUP_KEY = "spinestrong_lastbackup";
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
+    catch { return []; }
+  }
+  function save(data) {
+    localStorage.setItem(KEY, JSON.stringify(data));
+  }
+  function todayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+  function toast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    setTimeout(() => t.classList.remove("show"), 1800);
+  }
+
+  function logSet() {
+    const ex = document.getElementById("exercise").value;
+    const wt = document.getElementById("weight").value;
+    const reps = document.getElementById("reps").value;
+    if (!wt) { toast("Enter a weight"); return; }
+    const data = load();
+    data.push({ ex, wt: Number(wt), reps: Number(reps) || null, ts: Date.now(), date: todayStr() });
+    save(data);
+    document.getElementById("weight").value = "";
+    document.getElementById("reps").value = "";
+    render();
+    toast("Logged ✓");
+  }
+
+  function render() {
+    const data = load().filter(d => d.date === todayStr()).reverse();
+    const list = document.getElementById("logList");
+    if (data.length === 0) {
+      list.innerHTML = '<div class="empty">Nothing logged yet.</div>';
+    } else {
+      list.innerHTML = data.map(d => `
+        <div class="log-entry">
+          <div>
+            <div class="ex">${d.ex}</div>
+            <div class="meta">${d.reps ? d.reps + " reps" : "—"} · ${new Date(d.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+          <div class="wt">${d.wt} lb</div>
+        </div>`).join("");
+    }
+    const lb = localStorage.getItem(BACKUP_KEY);
+    document.getElementById("backupNote").textContent =
+      lb ? "Last backup: " + new Date(Number(lb)).toLocaleDateString() : "No backups yet — export to be safe.";
+  }
+
+  function exportData() {
+    const data = load();
+    const blob = new Blob([JSON.stringify({ exported: Date.now(), log: data }, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "spinestrong-backup-" + todayStr() + ".json";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    localStorage.setItem(BACKUP_KEY, String(Date.now()));
+    render();
+    toast("Backup saved");
+  }
+
+  function importData(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const parsed = JSON.parse(e.target.result);
+        const incoming = parsed.log || parsed;
+        if (!Array.isArray(incoming)) throw new Error("bad format");
+        save(incoming);
+        render();
+        toast("Imported " + incoming.length + " entries");
+      } catch { toast("Couldn't read that file"); }
+    };
+    reader.readAsText(file);
+  }
+
+  // Show install tip only in Safari browser (not when already installed standalone)
+  const isStandalone = window.navigator.standalone === true ||
+    window.matchMedia("(display-mode: standalone)").matches;
+  if (!isStandalone) document.getElementById("installTip").style.display = "block";
+
+  // Register service worker for installability + offline
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  }
+
+  render();
+</script>
+</body>
+</html>
