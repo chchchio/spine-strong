@@ -1,234 +1,788 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="SpineStrong" />
-<meta name="theme-color" content="#0F1115" />
-<link rel="manifest" href="manifest.json" />
-<link rel="apple-touch-icon" href="icon-180.png" />
-<title>SpineStrong</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<title>SpineStrong — Test</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
 <style>
-  :root {
-    --bg: #0F1115;
-    --card: #1A1D23;
-    --border: #2A2D35;
-    --muted: #6B7280;
-    --text: #E8EAF0;
-    --accent: #D4F34A;
-    --warn: #F59E0B;
-  }
-  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    margin: 0; padding: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
-  body {
-    padding: env(safe-area-inset-top) 16px calc(env(safe-area-inset-bottom) + 24px) 16px;
-    max-width: 520px; margin: 0 auto;
-  }
-  header { padding: 20px 0 16px; }
-  .logo {
-    font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); font-weight: 700;
-  }
-  h1 { font-size: 22px; margin: 4px 0 2px; font-weight: 600; }
-  .sub { color: var(--muted); font-size: 13px; margin: 0; }
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 14px; padding: 16px; margin-bottom: 14px;
-  }
-  .card h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; }
-  .row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .row label { flex: 1; font-size: 14px; }
-  input[type="text"], input[type="number"], select {
-    background: #12151B; border: 1px solid var(--border); color: var(--text);
-    border-radius: 9px; padding: 11px 12px; font-size: 16px; font-family: inherit;
-    width: 100%;
-  }
-  input:focus, select:focus { outline: none; border-color: var(--accent); }
-  .weight-input { width: 90px; text-align: center; }
-  .btn {
-    background: var(--accent); color: #0F1115; border: none;
-    border-radius: 10px; padding: 13px 16px; font-size: 15px; font-weight: 700;
-    font-family: inherit; cursor: pointer; width: 100%;
-  }
-  .btn:active { opacity: 0.85; }
-  .btn-ghost {
-    background: transparent; color: var(--text); border: 1px solid var(--border);
-  }
-  .btn-row { display: flex; gap: 10px; }
-  .log-entry {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 14px;
-  }
-  .log-entry:last-child { border-bottom: none; }
-  .log-entry .ex { font-weight: 500; }
-  .log-entry .meta { color: var(--muted); font-size: 12px; }
-  .log-entry .wt { color: var(--accent); font-weight: 700; font-variant-numeric: tabular-nums; }
-  .empty { color: var(--muted); font-size: 14px; text-align: center; padding: 18px 0; }
-  .backup-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 8px; }
-  .toast {
-    position: fixed; bottom: calc(env(safe-area-inset-bottom) + 20px); left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--accent); color: #0F1115; padding: 12px 20px;
-    border-radius: 30px; font-weight: 700; font-size: 14px;
-    transition: transform 0.3s; z-index: 100; opacity: 0;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-  .install-tip {
-    background: #1E2230; border: 1px solid var(--accent); border-radius: 12px;
-    padding: 12px 14px; font-size: 13px; margin-bottom: 14px; line-height: 1.5;
-  }
-  .install-tip b { color: var(--accent); }
+  :root{--bg:#0F1115;--card:#1A1D23;--border:#2A2D35;--muted:#6B7280;--text:#E8EAF0;--accent:#D4F34A;--core:#7DD3FC;--muscle:#F2666B;--warn:#F59E0B;--sport:#c0a8ff;}
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0;}
+  html,body{background:var(--bg);color:var(--text);font-family:"DM Sans",-apple-system,system-ui,sans-serif;-webkit-font-smoothing:antialiased;}
+  body{max-width:520px;margin:0 auto;padding:env(safe-area-inset-top) 14px calc(env(safe-area-inset-bottom) + 80px) 14px;}
+  .screen{display:none;}.screen.active{display:block;}
+  header{padding:16px 0 6px;}
+  .logo{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;}
+  h1{font-size:21px;font-weight:600;margin:3px 0 2px;letter-spacing:-0.4px;}
+  .sub{color:var(--muted);font-size:13px;}
+  .section-title{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:20px 2px 9px;}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:11px;}
+  /* nav */
+  .navbar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,17,21,0.96);backdrop-filter:blur(10px);border-top:1px solid var(--border);display:flex;max-width:520px;margin:0 auto;padding:8px 0 calc(env(safe-area-inset-bottom) + 8px);z-index:50;}
+  .navitem{flex:1;text-align:center;font-size:10px;color:var(--muted);font-weight:600;padding:4px;cursor:pointer;}
+  .navitem.active{color:var(--accent);}.navitem .ic{font-size:16px;display:block;margin-bottom:3px;}
+  /* TODAY */
+  .progress-strip{display:flex;gap:4px;margin:10px 0 4px;}
+  .pdot{flex:1;height:4px;border-radius:2px;background:#23272f;}.pdot.done{background:var(--accent);}
+  .ex{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:11px;overflow:hidden;}
+  .ex.core{border-color:#274152;}
+  .ex-head{display:flex;align-items:center;gap:11px;padding:14px;cursor:pointer;}
+  .ex-num{flex-shrink:0;width:26px;height:26px;border-radius:8px;background:#23272f;color:var(--muted);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+  .ex.done .ex-num{background:var(--accent);color:#0F1115;}
+  .ex-headinfo{flex:1;}.ex-badge{font-size:9px;font-weight:700;letter-spacing:.5px;padding:2px 7px;border-radius:5px;text-transform:uppercase;display:inline-block;margin-bottom:3px;}
+  .ex-badge.core{background:#274152;color:var(--core);}.ex-badge.lift{background:#2A2D35;color:var(--accent);}
+  .ex-name{font-size:14.5px;font-weight:600;line-height:1.2;}.ex-sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+  .chev{color:var(--muted);font-size:12px;transition:.2s;}.ex.open .chev{transform:rotate(180deg);}
+  .ex-body{display:none;padding:0 14px 14px;}.ex.open .ex-body{display:block;}
+  .rx{display:flex;background:linear-gradient(180deg,#0e1216,#0a0d11);border:1px solid #232830;border-radius:12px;margin-bottom:13px;overflow:hidden;}
+  .rxitem{flex:1;padding:9px 4px 8px;text-align:center;position:relative;}
+  .rxitem+.rxitem::before{content:"";position:absolute;left:0;top:20%;height:60%;width:1px;background:#262b34;}
+  .rxk{font-size:8px;letter-spacing:1px;text-transform:uppercase;font-weight:800;margin-bottom:3px;color:#7c8595;}
+  .rxv{font-size:14px;font-weight:800;color:var(--text);line-height:1;}.rxu{font-size:8px;color:var(--muted);margin-left:1px;font-weight:700;}
+  .rxitem.s .rxv,.rxitem.r .rxv{color:#9fb8ff;}.rxitem.t .rxv{color:#c0a8ff;font-size:12.5px;}.rxitem.k .rxv{color:#ffc98a;}
+  .rxitem.w{background:radial-gradient(120% 140% at 50% 0%,rgba(212,243,74,0.18),transparent 60%);}
+  .rxitem.w .rxk{color:#b8d44a;}.rxitem.w .rxv{color:var(--accent);text-shadow:0 0 14px rgba(212,243,74,0.55);font-size:15px;}
+  .imgwell{background:#fff;border:1px solid #20242c;border-radius:11px;padding:6px;overflow:hidden;min-height:90px;}
+  .imgwell img{width:100%;display:block;border-radius:6px;}
+  .movedesc{font-size:12.5px;line-height:1.55;color:#cfd3dc;background:#0c0f13;border:1px solid #20242c;border-radius:11px;padding:11px 13px;margin-top:9px;}
+  .logblock{margin-top:13px;background:#0c0f13;border:1px solid #20242c;border-radius:11px;padding:13px;}
+  .logtop{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .wt{display:flex;align-items:center;gap:7px;}.wt label{font-size:11px;color:var(--muted);font-weight:600;}
+  .wt input{width:54px;background:#12161c;border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px;font-size:16px;text-align:center;font-family:inherit;}
+  .setdots{display:flex;align-items:center;gap:6px;}.setdots .sl{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:700;}
+  .setdot{width:30px;height:30px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer;}
+  .setdot.done{background:var(--accent);color:#0F1115;border-color:var(--accent);}
+  .timer{display:flex;align-items:center;gap:11px;margin-top:12px;padding-top:12px;border-top:1px solid #20242c;}
+  .ring{position:relative;width:42px;height:42px;flex-shrink:0;}.ring svg{transform:rotate(-90deg);}
+  .tnum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+  .tinfo{flex:1;}.tlabel{font-size:12px;font-weight:600;}.tsub{font-size:10.5px;color:var(--muted);}
+  .tbtn{background:var(--accent);color:#0F1115;border:none;border-radius:8px;padding:9px 16px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
+  .donebtn{width:100%;margin-top:12px;background:transparent;border:1.5px solid var(--accent);color:var(--accent);border-radius:10px;padding:11px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
+  .ex.done .donebtn{background:var(--accent);color:#0F1115;}
+  .mmap{display:flex;gap:12px;align-items:center;background:#0c0f13;border:1px solid #20242c;border-radius:11px;padding:10px 13px;margin-top:9px;}
+  .mmap-info{flex:1;}.mmap-ttl{font-size:9.5px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px;}.mmap-p{font-size:12px;font-weight:700;color:var(--muscle);}
+  .caps{margin-top:9px;display:flex;flex-direction:column;gap:6px;}.cap{display:flex;gap:8px;font-size:12px;line-height:1.4;}.cap .k{flex-shrink:0;width:48px;font-size:9px;letter-spacing:.5px;text-transform:uppercase;font-weight:700;padding-top:1px;}.cap.setup .k{color:#9aa3b2;}.cap.focus .k{color:var(--accent);}.cap .v{color:#cfd3dc;}
+  .disc{display:flex;gap:7px;font-size:11px;line-height:1.4;padding:8px 11px;border-radius:8px;margin-top:9px;background:#13201a;color:#9fd9a0;}
+  .last{font-size:11px;color:var(--muted);margin-top:9px;}.last b{color:var(--accent);}
+  .vbtn{display:flex;align-items:center;gap:8px;background:#1f2024;border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-top:12px;font-size:12.5px;font-weight:600;color:var(--text);text-decoration:none;}.vbtn .rt{color:#ff4444;}.vbtn .arr{margin-left:auto;color:var(--muted);}
+  .savetag{display:flex;align-items:center;gap:7px;justify-content:center;font-size:11.5px;color:#9fd9a0;background:#13201a;border:1px solid #1f3a28;border-radius:10px;padding:9px;margin-bottom:11px;}
+  /* WEEK */
+  .weekhead{display:flex;align-items:flex-end;justify-content:space-between;}
+  .weeknav{display:flex;gap:6px;align-items:center;}
+  .weeknav button{background:var(--card);border:1px solid var(--border);color:var(--text);width:30px;height:30px;border-radius:9px;font-size:14px;cursor:pointer;}
+  .weeknav .wlabel{font-size:11px;color:var(--muted);min-width:40px;text-align:center;}
+  .wsummary{display:flex;gap:9px;margin:14px 0;}
+  .wstat{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px;text-align:center;}
+  .wstat .wv{font-size:19px;font-weight:800;color:var(--accent);}.wstat .wl{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-top:4px;}
+  .strip{display:flex;gap:5px;margin-bottom:14px;}
+  .scol{flex:1;background:var(--card);border:1px solid var(--border);border-radius:11px;padding:9px 2px 8px;text-align:center;cursor:pointer;}
+  .scol.today{border-color:var(--accent);background:#181d10;}.scol.active{box-shadow:0 0 0 1px var(--core);border-color:var(--core);}
+  .scol .sdn{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;}.scol .sdd{font-size:15px;font-weight:800;margin:1px 0 4px;}
+  .scol .sicon{font-size:15px;height:18px;line-height:18px;}.donebadge{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#0F1115;font-size:11px;font-weight:800;line-height:16px;}
+  .detail{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;}.detail.sport{border-color:#332b52;}
+  .dhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}.dtitle{font-size:16px;font-weight:600;}
+  .dstatus{font-size:10px;font-weight:700;text-transform:uppercase;padding:3px 8px;border-radius:6px;}
+  .dstatus.done{background:#1f3320;color:var(--accent);}.dstatus.today{background:#181d10;color:var(--accent);border:1px solid var(--accent);}
+  .dstatus.sched{background:#23272f;color:var(--muted);}.dstatus.rest{background:#23272f;color:var(--muted);}.dstatus.busy{background:#332417;color:var(--warn);}
+  .dsub{font-size:12px;color:var(--muted);margin-bottom:12px;}
+  .exline{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#cfd3dc;padding:7px 0;border-bottom:1px solid #20242c;}.exline:last-child{border:none;}
+  .exline .ed{width:6px;height:6px;border-radius:50%;background:var(--accent);}.exline .ed.core{background:var(--core);}
+  .actions{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap;}
+  .actions button{flex:1;min-width:calc(50% - 4px);border-radius:9px;padding:10px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--text);}
+  .actions button.primary{background:var(--accent);color:#0F1115;border-color:var(--accent);}.actions button.warn{border-color:var(--warn);color:var(--warn);}
+  .sportrow{display:flex;align-items:center;gap:8px;margin-top:13px;padding-top:13px;border-top:1px solid var(--border);}
+  .sportrow .sl{font-size:12px;color:var(--muted);flex:1;}.sporttog{display:flex;gap:6px;}
+  .sporttog button{background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:8px;padding:6px 11px;font-size:12px;cursor:pointer;}
+  .sporttog button.on{background:#2a2440;border-color:var(--sport);color:var(--sport);}
+  .movegrid{margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
+  .movelabel{font-size:11.5px;color:var(--muted);margin-bottom:9px;line-height:1.4;}
+  .moverow{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+  .moverow .mt{flex:1;font-size:12px;font-weight:600;}
+  .moverow button{background:#12161c;border:1px solid var(--border);color:var(--accent);border-radius:8px;padding:7px 12px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer;}
+  .skiplink{background:none;border:none;color:var(--muted);font-size:11px;text-decoration:underline;cursor:pointer;font-family:inherit;margin-top:4px;padding:4px 0;}
+  .skipnote{font-size:11.5px;color:var(--muted);background:#13161b;border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:12px;}
+  .gear{font-size:13px;color:var(--accent);text-decoration:none;font-weight:600;}
+  /* PROGRESS */
+  .coach{background:linear-gradient(135deg,rgba(212,243,74,0.12),rgba(212,243,74,0.03));border:1px solid #2f3a1a;border-radius:13px;padding:13px 15px;margin:12px 0;font-size:13px;line-height:1.5;color:#e8f0c9;}.coach b{color:var(--accent);}
+  .hero{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:11px;}
+  .streak{text-align:center;padding-right:14px;border-right:1px solid var(--border);}.streak .big{font-size:34px;font-weight:800;color:var(--accent);line-height:1;}.streak .lab{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-top:4px;}
+  .heat{flex:1;}.heat .ht{font-size:11px;color:var(--muted);margin-bottom:8px;}.heatgrid{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;}
+  .hcell{aspect-ratio:1;border-radius:2px;background:#23272f;}.hcell.train{background:var(--accent);}
+  .statgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;margin-bottom:11px;}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:13px 8px;text-align:center;}.stat .v{font-size:22px;font-weight:800;}.stat .l{font-size:9px;color:var(--muted);text-transform:uppercase;font-weight:700;margin-top:5px;}.stat.accent .v{color:var(--accent);}
+  .backcard{display:flex;align-items:center;gap:12px;background:#13201a;border:1px solid #1f3a28;border-radius:13px;padding:13px 15px;}
+  .backcard .shield{font-size:22px;}.backcard .bt{font-size:13px;font-weight:700;color:#9fd9a0;}.backcard .bs{font-size:11.5px;color:#7fae84;margin-top:2px;line-height:1.4;}
+  .vbar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;}.vbar-row .vname{font-size:12px;width:74px;color:#cfd3dc;}.vbar-track{flex:1;height:9px;background:#23272f;border-radius:5px;overflow:hidden;}.vbar-fill{height:100%;border-radius:5px;}.vbar-row .vpct{font-size:11px;color:var(--muted);width:30px;text-align:right;}
+  .wchart{margin-bottom:11px;}.wlabel{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;}.wname{font-size:13px;font-weight:600;}.wcur{font-size:12px;color:var(--accent);font-weight:700;}.spark{width:100%;height:40px;}.wmeta{font-size:10.5px;color:var(--muted);margin-top:3px;}.wmeta .up{color:var(--accent);}
+  /* PREFS */
+  .prow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}.prow:first-child{padding-top:0;}.prow:last-child{border-bottom:none;padding-bottom:0;}
+  .plbl{font-size:13.5px;font-weight:600;}.pdesc{font-size:11.5px;color:var(--muted);margin-top:2px;line-height:1.4;}
+  .stepper{display:flex;align-items:center;gap:8px;}.stepper button{width:27px;height:27px;border-radius:8px;border:1px solid var(--border);background:#12161c;color:var(--text);font-size:15px;font-weight:700;cursor:pointer;}.stepper .val{font-size:14px;font-weight:700;min-width:18px;text-align:center;}
+  .daypills{display:flex;gap:5px;margin-top:10px;}.daypill{flex:1;text-align:center;padding:9px 0;border-radius:9px;border:1px solid var(--border);background:#12161c;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;}.daypill.on{background:var(--accent);color:#0F1115;border-color:var(--accent);}
+  .switch{width:46px;height:27px;border-radius:20px;background:#33363f;position:relative;transition:.2s;cursor:pointer;}.switch.on{background:var(--accent);}.knob{position:absolute;top:3px;left:3px;width:21px;height:21px;border-radius:50%;background:#fff;transition:.2s;}.switch.on .knob{left:22px;}
+  .sportline{display:flex;align-items:center;gap:8px;margin-bottom:9px;}.sportline select{flex:1;background:#12161c;border:1px solid var(--border);color:var(--text);border-radius:9px;padding:11px;font-size:13px;font-family:inherit;-webkit-appearance:none;}.sportline .every{font-size:12px;color:var(--muted);}.sportline .del{background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;}
+  .addsport{width:100%;background:#12161c;border:1px dashed var(--border);color:var(--accent);border-radius:10px;padding:11px;font-size:13px;font-weight:700;font-family:inherit;cursor:pointer;}
+  .pausebtn{width:100%;border-radius:11px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--warn);background:transparent;color:var(--warn);}.pausebtn.paused{background:var(--accent);border-color:var(--accent);color:#0F1115;}
+  .resetbtn{width:100%;margin-top:10px;background:none;border:none;color:var(--muted);font-size:11px;text-decoration:underline;cursor:pointer;font-family:inherit;}
 </style>
 </head>
 <body>
-<header>
-  <div class="logo">SpineStrong</div>
-  <h1>Today's Log</h1>
-  <p class="sub">Minimal test build — log a weight, then close and reopen to confirm it stuck.</p>
-</header>
 
-<div id="installTip" class="install-tip" style="display:none;">
-  <b>Install me:</b> tap the Share icon in Safari, then <b>Add to Home Screen</b>. Open from the home-screen icon after that.
-</div>
+<div id="today" class="screen active"></div>
+<div id="week" class="screen"></div>
+<div id="progress" class="screen"></div>
+<div id="prefs" class="screen"></div>
 
-<div class="card">
-  <h2>Log a set</h2>
-  <div class="row">
-    <select id="exercise">
-      <option value="Lat Pulldown">Lat Pulldown</option>
-      <option value="Seated Cable Row">Seated Cable Row</option>
-      <option value="Chest Press">Chest Press</option>
-      <option value="Shoulder Press">Shoulder Press</option>
-    </select>
-  </div>
-  <div class="row">
-    <input type="number" id="weight" class="weight-input" placeholder="lbs" inputmode="numeric" />
-    <input type="number" id="reps" class="weight-input" placeholder="reps" inputmode="numeric" />
-    <button class="btn" style="flex:1;" onclick="logSet()">Log</button>
-  </div>
-</div>
-
-<div class="card">
-  <h2>Logged today</h2>
-  <div id="logList"><div class="empty">Nothing logged yet.</div></div>
-</div>
-
-<div class="card">
-  <h2>Your data</h2>
-  <div class="btn-row">
-    <button class="btn btn-ghost" onclick="exportData()">Export backup</button>
-    <button class="btn btn-ghost" onclick="document.getElementById('importFile').click()">Import</button>
-  </div>
-  <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importData(event)" />
-  <div class="backup-note" id="backupNote">No backups yet.</div>
-</div>
-
-<div id="toast" class="toast"></div>
+<nav class="navbar">
+  <div class="navitem active" data-nav="today"><span class="ic">●</span>Today</div>
+  <div class="navitem" data-nav="week"><span class="ic">▦</span>Week</div>
+  <div class="navitem" data-nav="progress"><span class="ic">📈</span>Progress</div>
+  <div class="navitem" data-nav="prefs"><span class="ic">⚙</span>Setup</div>
+</nav>
 
 <script>
-  const KEY = "spinestrong_log_v1";
-  const BACKUP_KEY = "spinestrong_lastbackup";
-
-  function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || []; }
-    catch { return []; }
-  }
-  function save(data) {
-    localStorage.setItem(KEY, JSON.stringify(data));
-  }
-  function todayStr() {
-    return new Date().toISOString().slice(0, 10);
-  }
-  function toast(msg) {
-    const t = document.getElementById("toast");
-    t.textContent = msg; t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 1800);
-  }
-
-  function logSet() {
-    const ex = document.getElementById("exercise").value;
-    const wt = document.getElementById("weight").value;
-    const reps = document.getElementById("reps").value;
-    if (!wt) { toast("Enter a weight"); return; }
-    const data = load();
-    data.push({ ex, wt: Number(wt), reps: Number(reps) || null, ts: Date.now(), date: todayStr() });
-    save(data);
-    document.getElementById("weight").value = "";
-    document.getElementById("reps").value = "";
-    render();
-    toast("Logged ✓");
-  }
-
-  function render() {
-    const data = load().filter(d => d.date === todayStr()).reverse();
-    const list = document.getElementById("logList");
-    if (data.length === 0) {
-      list.innerHTML = '<div class="empty">Nothing logged yet.</div>';
-    } else {
-      list.innerHTML = data.map(d => `
-        <div class="log-entry">
-          <div>
-            <div class="ex">${d.ex}</div>
-            <div class="meta">${d.reps ? d.reps + " reps" : "—"} · ${new Date(d.ts).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
-          </div>
-          <div class="wt">${d.wt} lb</div>
-        </div>`).join("");
-    }
-    const lb = localStorage.getItem(BACKUP_KEY);
-    document.getElementById("backupNote").textContent =
-      lb ? "Last backup: " + new Date(Number(lb)).toLocaleDateString() : "No backups yet — export to be safe.";
-  }
-
-  function exportData() {
-    const data = load();
-    const blob = new Blob([JSON.stringify({ exported: Date.now(), log: data }, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = "spinestrong-backup-" + todayStr() + ".json";
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
-    localStorage.setItem(BACKUP_KEY, String(Date.now()));
-    render();
-    toast("Backup saved");
-  }
-
-  function importData(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const parsed = JSON.parse(e.target.result);
-        const incoming = parsed.log || parsed;
-        if (!Array.isArray(incoming)) throw new Error("bad format");
-        save(incoming);
-        render();
-        toast("Imported " + incoming.length + " entries");
-      } catch { toast("Couldn't read that file"); }
-    };
-    reader.readAsText(file);
-  }
-
-  // Show install tip only in Safari browser (not when already installed standalone)
-  const isStandalone = window.navigator.standalone === true ||
-    window.matchMedia("(display-mode: standalone)").matches;
-  if (!isStandalone) document.getElementById("installTip").style.display = "block";
-
-  // Register service worker for installability + offline
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js").catch(() => {});
-  }
-
-  render();
+const IMGS = new Proxy({}, {get:(_,id)=> typeof id==='string' ? 'images/'+id+'.png' : undefined});
+const CORPUS_FULL = {"meta": {"version": 1, "note": "Disc-safe exercise library for L4-L5 / L5-S1. Each exercise tagged for rotation by movement pattern. safety: green=always safe, amber=safe with form caveats. stiffDayDrop=true means swap out when back is stiff. compressive=true means axial/compressive spinal load.", "patterns": ["vertical_pull", "horizontal_pull", "vertical_push", "horizontal_push", "hip_hinge", "knee_dominant", "anti_rotation", "anti_extension", "anti_lateral_flexion", "carry", "mobility_reset", "hip_activation", "decompression"], "trustedCreators": ["AskDoctorJo", "Bob and Brad", "Athlean-X", "Squat University", "Yoga With Adriene"], "sessionRules": {"corePlacement": "interleave_as_active_rest", "corePlacementNote": "Core anchors (Dead Bug, Bird-Dog, Side Plank, Pallof) are slotted into rest periods BETWEEN main lifts, never stacked at the start. Sequence flows lift -> core filler -> lift. This reduces dread, shortens perceived session length, and keeps the spine un-fatigued before loading.", "coreAtHomeToggle": true, "coreAtHomeNote": "User can flip 'core at home instead' per session. When on, the gym session omits core fillers and the app flags core to be done at home, logged separately so tracking stays accurate.", "volumeAllocation": "core(anchor,every session) > shoulders/back(engine) > arms + legs(glute/ham-led, ~1 session/wk) > chest(minor) ; mobility woven throughout, concentrated around sport days", "anchorsPlusRotation": "Anchor movements recur weekly for mastery + clean progression tracking; remaining slots rotate from the pool for variety and fresh angles", "progression": "Start user on 'foundation' level moves; introduce 'intermediate'/'advanced' only as consistent sessions are logged", "structure": "Rolling 4-week plan in background -> adjustable Week view -> executable Day view; missed sessions reflow forward and the month rebalances around actual completions", "stiffDayProtocol": "On stiff-back toggle: drop all stiffDayDrop exercises and kettlebell work, swap to supported/low-load variants, expand decompression + McKenzie warm-up, front-load back-reset cool-down, lower intensity (~6/10)", "redFlagRule": "Any pain or tingling radiating down a leg = stop immediately and seek professional assessment", "preSportRule": "Sessions before squash/golf kept ~6/10 effort, mobility/activation emphasis, no heavy loading"}}, "exercises": [{"id": "lat_pulldown_wide", "name": "Wide-Grip Lat Pulldown", "pattern": "vertical_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lats, mid-back, biceps", "why": "Builds back width with zero spinal load \u2014 you're seated and supported. Strengthening the lats supports better posture, which offloads your lower discs.", "cues": ["Sit tall, thighs locked under pad", "Pull the bar to your upper chest, not behind your neck", "Drive elbows down and back", "Control the bar back up \u2014 no yanking", "Keep your torso nearly upright, minimal lean"], "discNote": "Fully supported seated position. No flexion or compression.", "yt": "lat pulldown proper form Athlean-X", "volumePriority": 2, "level": "foundation"}, {"id": "lat_pulldown_close", "name": "Close-Grip Lat Pulldown", "pattern": "vertical_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lats, lower lats, biceps", "why": "A neutral close grip hits the lats through a longer range and is easier on the shoulders. Rotating grips keeps the stimulus fresh.", "cues": ["Use the V-handle or close neutral grip", "Sit tall, slight backward lean only", "Pull to your sternum", "Squeeze the back at the bottom", "Slow return"], "discNote": "Seated and supported. Avoid heaving with the lower back.", "yt": "close grip lat pulldown form", "volumePriority": 2, "level": "foundation"}, {"id": "assisted_pullup", "name": "Assisted Pull-Up (Machine)", "pattern": "vertical_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lats, mid-back, biceps, grip", "why": "The assisted machine lets you train the pull-up pattern with a braced, hanging spine \u2014 gentle decompression actually feels good for the lower back.", "cues": ["Set the assist weight so you get 8-10 clean reps", "Start from a full hang, shoulders engaged", "Pull chest toward the bar", "Control the descent", "Keep core gently braced, don't swing"], "discNote": "Hanging position is slightly decompressive. Avoid kipping or swinging.", "yt": "assisted pull up machine form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "straight_arm_pulldown", "name": "Straight-Arm Cable Pulldown", "pattern": "vertical_pull", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lats (isolation), serratus", "why": "Isolates the lats without bicep involvement and teaches you to feel the back working. Low load, very back-friendly.", "cues": ["Stand tall, slight hip hinge with neutral spine", "Arms straight, push the bar down to your thighs", "Feel the lats, not the triceps", "Hips stay still \u2014 no rocking", "Smooth tempo"], "discNote": "Keep the hinge shallow and the spine neutral; don't round.", "yt": "straight arm pulldown lats form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "seated_cable_row", "name": "Seated Cable Row (Neutral Grip)", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Mid-back, rhomboids, lats, biceps", "why": "The cornerstone horizontal pull for posture and a strong mid-back, which directly protects your lumbar spine by holding you upright.", "cues": ["Sit tall, soft knees, chest up", "Maintain a neutral spine \u2014 do NOT round to reach", "Pull the handle to your belly button", "Squeeze shoulder blades together", "Return under control without rounding forward"], "discNote": "AMBER: safe only if you keep a neutral spine. The risk is rounding/flexing under load on the return. Don't lean way forward to stretch.", "yt": "seated cable row form neutral spine Squat University", "mayfair": true, "volumePriority": 2, "level": "intermediate", "anchor": true}, {"id": "chest_supported_row", "name": "Chest-Supported Machine Row", "pattern": "horizontal_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Mid-back, rhomboids, rear delts", "why": "The chest pad takes your lower back completely out of the equation \u2014 all the rowing benefit, none of the spinal risk. Ideal on stiffer days.", "cues": ["Chest firmly on the pad", "Pull the handles back, elbows toward hips", "Squeeze the shoulder blades", "Don't peel your chest off the pad to move more weight", "Controlled return"], "discNote": "GREEN: chest support removes lumbar load entirely. A top pick for stiff days.", "yt": "chest supported row machine form", "mayfair": true, "volumePriority": 2, "level": "foundation", "anchor": true}, {"id": "single_arm_cable_row", "name": "Single-Arm Cable Row", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Lats, mid-back, anti-rotation core", "why": "Rowing one arm at a time forces your core to resist rotation \u2014 a built-in anti-rotation bonus that carries straight into your golf swing stability.", "cues": ["Staggered or square stance, knees soft", "Neutral spine, brace the core", "Row the handle to your hip", "Resist the urge to twist toward the cable", "Control the return without rotating"], "discNote": "AMBER: the anti-rotation demand is the point, but keep hips square and spine neutral.", "yt": "single arm cable row form", "mayfair": true, "volumePriority": 2, "level": "intermediate"}, {"id": "face_pull", "name": "Cable Face Pull", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Rear delts, rotator cuff, mid-traps", "why": "The best insurance for healthy shoulders and upright posture. Strengthens the often-neglected rear shoulder and upper back.", "cues": ["Set cable at face height", "Pull the rope toward your forehead", "Lead with the elbows, high and wide", "Externally rotate at the end \u2014 thumbs back", "Light weight, high reps"], "discNote": "Standing tall, no spinal load. Keep ribs down, don't arch.", "yt": "face pull form rear delts Athlean-X", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "machine_chest_press", "name": "Machine Chest Press", "pattern": "horizontal_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Chest, front delts, triceps", "why": "Builds the chest with full back support against the pad \u2014 the seated machine version removes the spinal stress of a barbell bench.", "cues": ["Back flat against the pad", "Handles at mid-chest height", "Press without flaring elbows past 75 degrees", "Don't arch the lower back to push more", "Control the negative"], "discNote": "GREEN: back fully supported. Keep the lower back against the pad \u2014 don't bridge.", "yt": "machine chest press proper form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "cable_chest_press", "name": "Standing Cable Chest Press", "pattern": "horizontal_push", "region": "upper", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "muscle": "Chest, front delts, core", "why": "Pressing while standing adds an anti-rotation and core-bracing challenge. Good for athletic carryover, but demands more spinal control.", "cues": ["Split stance, brace hard", "Press handles forward together", "Keep ribs down, don't arch", "Core stays tight throughout", "Slow return resisting the pull back"], "discNote": "AMBER + stiff-day swap: the standing brace is more demanding. On stiff days use the machine chest press instead.", "yt": "standing cable chest press form", "mayfair": true, "volumePriority": 2, "level": "advanced"}, {"id": "incline_machine_press", "name": "Incline Machine Press", "pattern": "horizontal_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Upper chest, front delts, triceps", "why": "Targets the upper chest for a fuller look, still fully supported. Rotating press angles keeps the chest developing evenly.", "cues": ["Back and head against the pad", "Press up and slightly in", "Don't let the lower back arch off the seat", "Full but controlled range", "Squeeze at the top"], "discNote": "GREEN: supported seated incline. No lumbar load.", "yt": "incline machine press form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "pec_deck", "name": "Pec Deck / Machine Fly", "pattern": "horizontal_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Chest (isolation)", "why": "Isolates the chest through a big stretch and squeeze with total back support. A joint-friendly way to add chest volume.", "cues": ["Back flat on the pad", "Slight bend in the elbows, hold it", "Bring the pads together in front of the chest", "Squeeze, then control the stretch back", "Don't overstretch the shoulders"], "discNote": "GREEN: seated and supported.", "yt": "pec deck machine fly form", "mayfair": true, "volumePriority": 4, "level": "foundation"}, {"id": "machine_shoulder_press", "name": "Machine Shoulder Press", "pattern": "vertical_push", "region": "upper", "equipment": "machine", "safety": "amber", "compressive": true, "stiffDayDrop": false, "golf": false, "muscle": "Shoulders, upper traps, triceps", "why": "Overhead pressing builds shoulder strength and size \u2014 the machine version guides the path and supports your back, but overhead loading still transmits some compression.", "cues": ["Seat height so handles start at ear level", "Press straight up without arching the lower back", "Lower until elbows reach about 90 degrees", "Keep the core braced", "If your back arches, lighten the load"], "discNote": "AMBER: overhead = some axial load. Safe IF you don't arch. Brace and keep ribs down.", "yt": "machine shoulder press form no back arch", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "cable_lateral_raise", "name": "Cable Lateral Raise", "pattern": "vertical_push", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Side delts (isolation)", "why": "Builds shoulder width \u2014 broader shoulders make your waist look smaller, supporting your upper-body reshape goal. No overhead compression.", "cues": ["Stand tall, cable behind you", "Raise the arm out to the side to shoulder height", "Lead with the elbow, slight bend", "No shrugging or swinging", "Control down"], "discNote": "GREEN: standing tall, light load, no spinal stress.", "yt": "cable lateral raise form", "mayfair": true, "volumePriority": 2, "level": "foundation", "anchor": true}, {"id": "machine_lateral_raise", "name": "Machine Lateral Raise", "pattern": "vertical_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Side delts (isolation)", "why": "Fixed path makes it easy to feel the side delts with zero balance or spinal demand. Great alternative when the cable station is busy.", "cues": ["Adjust seat so pivot aligns with shoulders", "Pads against the outer arms", "Raise to shoulder height", "Pause briefly", "Lower slowly"], "discNote": "GREEN: seated and supported.", "yt": "machine lateral raise form", "mayfair": true, "volumePriority": 2, "level": "foundation", "anchor": true}, {"id": "tricep_pushdown", "name": "Cable Tricep Pushdown", "pattern": "horizontal_push", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Triceps", "why": "Strong triceps round out arm and pressing strength. A simple, low-risk standing isolation.", "cues": ["Stand tall, elbows pinned to your sides", "Push the bar or rope down to lockout", "Keep elbows still \u2014 only the forearms move", "Squeeze the triceps at the bottom", "Control back up"], "discNote": "GREEN: brace lightly, don't lean over the weight.", "yt": "tricep pushdown form", "mayfair": true, "volumePriority": 3, "level": "foundation"}, {"id": "cable_bicep_curl", "name": "Cable Bicep Curl", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Biceps", "why": "Constant cable tension builds the biceps through the full range. Low-risk arm work to finish an upper day.", "cues": ["Stand tall, elbows at your sides", "Curl the bar up", "No swinging or using the back", "Squeeze at the top", "Lower slowly"], "discNote": "GREEN: keep the torso still; don't swing from the hips/back.", "yt": "cable bicep curl form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "leg_press", "name": "Leg Press (Machine)", "pattern": "knee_dominant", "region": "lower", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Quads, glutes, hamstrings", "why": "All the leg-building benefit of a squat with your back supported against the pad \u2014 no axial spinal load. Builds leg drive for golf and squash.", "cues": ["Back and hips flat against the pad", "Feet shoulder-width, mid-platform", "Lower until knees reach ~90 degrees \u2014 NO further", "Do NOT let your lower back round off the pad at the bottom", "Press through mid-foot, don't lock out hard"], "discNote": "AMBER: safe with limited depth. Going too deep makes the pelvis tuck and the lumbar spine round under load \u2014 stop at 90 degrees.", "yt": "leg press form lower back safe depth", "mayfair": true, "volumePriority": 3, "level": "intermediate"}, {"id": "leg_extension", "name": "Leg Extension (Machine)", "pattern": "knee_dominant", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Quads (isolation)", "why": "Isolates the quads with the back fully supported. A safe way to add knee-extension strength without any spinal involvement.", "cues": ["Sit back into the seat", "Pad on the lower shins", "Extend smoothly to nearly straight", "Squeeze the quads", "Lower under control"], "discNote": "GREEN: seated and supported.", "yt": "leg extension machine form", "mayfair": true, "volumePriority": 4, "level": "foundation"}, {"id": "lying_leg_curl", "name": "Lying / Seated Leg Curl", "pattern": "hip_hinge", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Hamstrings (isolation)", "why": "Strong hamstrings take load off the lower back and balance out cycling-dominant quads. Supported and disc-safe.", "cues": ["Hips and torso on the pad", "Pad on the lower calves", "Curl the heels toward the glutes", "Don't let the hips lift", "Control the return"], "discNote": "GREEN: keep the hips down so the lower back doesn't arch.", "yt": "seated leg curl form", "mayfair": true, "volumePriority": 3, "level": "foundation"}, {"id": "hip_thrust_machine", "name": "Machine Hip Thrust", "pattern": "hip_hinge", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Glutes, hamstrings", "why": "The single best glute builder. Strong glutes are your lower back's best friend \u2014 they power hip extension so your lumbar spine doesn't have to.", "cues": ["Pad across the hips", "Drive through the heels", "Squeeze the glutes hard at the top", "Ribs down \u2014 finish with the glutes, NOT by arching the back", "Lower under control"], "discNote": "GREEN: the cue that matters \u2014 finish the lockout with glutes, not lumbar extension.", "yt": "machine hip thrust glute form ribs down", "mayfair": true, "volumePriority": 3, "level": "foundation"}, {"id": "glute_bridge", "name": "Glute Bridge (Floor)", "pattern": "hip_activation", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Glutes, hamstrings", "why": "A foundational glute activator that doubles as a gentle, spine-neutral way to wake up the posterior chain. Excellent in warm-ups and on stiff days.", "cues": ["Lie on your back, knees bent, feet flat", "Press through heels, lift the hips", "Squeeze the glutes at the top", "Keep a neutral spine \u2014 don't overarch", "Lower slowly"], "discNote": "GREEN: a back-friendly staple. Don't hyperextend at the top.", "yt": "glute bridge form Bob and Brad", "volumePriority": 3, "level": "foundation"}, {"id": "hip_abductor_machine", "name": "Hip Abductor Machine", "pattern": "hip_activation", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Glute medius, abductors", "why": "Strengthens the side glutes that stabilize your pelvis when you walk, lunge for a squash shot, or rotate in a golf swing. A stable pelvis protects the discs.", "cues": ["Sit back into the seat", "Pads on the outer thighs", "Push the knees apart", "Pause at the end", "Control back in"], "discNote": "GREEN: seated and supported.", "yt": "hip abductor machine form", "mayfair": true, "volumePriority": 3, "level": "foundation"}, {"id": "hip_adductor_machine", "name": "Hip Adductor Machine", "pattern": "hip_activation", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Inner thigh adductors", "why": "Balances the abductor work and supports pelvic stability and groin health \u2014 relevant for the lateral demands of squash.", "cues": ["Sit back into the seat", "Pads on the inner thighs", "Squeeze the knees together", "Control the return", "Don't force the start stretch"], "discNote": "GREEN: seated and supported.", "yt": "hip adductor machine form", "mayfair": true, "volumePriority": 4, "level": "foundation"}, {"id": "calf_raise", "name": "Standing / Seated Calf Raise", "pattern": "knee_dominant", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Calves", "why": "Calf strength supports ankle stability for squash and walking the golf course. Minimal and low-risk.", "cues": ["Balls of the feet on the platform", "Rise up onto the toes", "Full stretch at the bottom", "Squeeze at the top", "Slow tempo"], "discNote": "GREEN: use the seated version or the machine that doesn't load the spine.", "yt": "calf raise form", "volumePriority": 4, "level": "foundation"}, {"id": "step_up", "name": "Low Box Step-Up", "pattern": "knee_dominant", "region": "lower", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "muscle": "Quads, glutes, single-leg stability", "why": "Single-leg strength and balance that carries into every sport. Trains the glutes and challenges pelvic control.", "cues": ["Use a low box (knee below hip height)", "Whole foot on the box", "Drive through the heel to stand", "Control the way down", "Tall torso, neutral spine"], "discNote": "AMBER + stiff-day swap: balance demand can tempt a lean. On stiff days use leg press or glute bridge instead.", "yt": "box step up form glutes", "volumePriority": 3, "level": "advanced"}, {"id": "pallof_press", "name": "Cable Pallof Press", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Deep core, obliques (anti-rotation)", "why": "Your single most important exercise. Anti-rotation strength is what protects the discs during the golf swing and squash twists \u2014 it trains the core to stabilize against rotational force at L4-L5.", "cues": ["Cable at chest height, stand side-on", "Hold the handle at your chest with both hands", "Press straight out \u2014 the cable tries to twist you", "RESIST the rotation, hold 2 seconds", "Return to the chest, keep hips square"], "discNote": "GREEN: gold standard for disc protection. No flexion, no compression. Always in the plan.", "yt": "pallof press form anti rotation", "mayfair": true, "volumePriority": 1, "level": "foundation", "anchor": true}, {"id": "pallof_overhead", "name": "Tall-Kneeling Pallof Press", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Deep core, obliques, glutes", "why": "Kneeling removes the legs from the equation, so your core and glutes do all the anti-rotation work. A fresh variation on the Pallof theme.", "cues": ["Tall-kneeling, hips fully extended", "Squeeze the glutes to lock the pelvis", "Press the handle straight out and resist the twist", "Ribs down, no arching", "Slow and controlled"], "discNote": "GREEN: keep a neutral, tall spine. Don't let the cable arch your back.", "yt": "tall kneeling pallof press form", "mayfair": true, "volumePriority": 1, "level": "foundation"}, {"id": "cable_chop", "name": "Half-Kneeling Cable Chop", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Obliques, deep core, anti-rotation", "why": "Trains controlled, hip-driven rotation \u2014 teaching your body to rotate from the hips and thoracic spine rather than the lumbar discs. Directly golf-relevant.", "cues": ["Half-kneeling, inside knee down", "Pull the handle high-to-low across the body", "Rotate through the upper back, NOT the lower back", "Keep hips square and still", "Control the return"], "discNote": "AMBER: the rotation must come from the t-spine and hips. If you feel it twisting the lower back, reduce range and load.", "yt": "half kneeling cable chop form", "mayfair": true, "volumePriority": 1, "level": "intermediate"}, {"id": "cable_lift", "name": "Half-Kneeling Cable Lift", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Obliques, deep core", "why": "The low-to-high mirror of the chop, training the rotational pattern in the opposite direction for balanced core development.", "cues": ["Half-kneeling stance", "Drive the handle low-to-high across the body", "Power from the hips and core", "Lower back stays neutral and still", "Controlled return"], "discNote": "AMBER: same rule \u2014 rotate from hips/t-spine, keep the lumbar quiet.", "yt": "half kneeling cable lift form", "mayfair": true, "volumePriority": 1, "level": "intermediate"}, {"id": "dead_bug", "name": "Dead Bug", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Deep core (transverse abdominis), anti-extension", "why": "A McGill Big 3 cornerstone. Trains the deep core to keep the spine stable while the limbs move \u2014 exactly the control that protects herniated discs.", "cues": ["Lie on your back, arms up, knees over hips", "Press the lower back gently into the floor", "Extend the opposite arm and leg slowly", "Keep the lower back flat \u2014 no arching", "Return and switch sides"], "discNote": "GREEN: the gold standard anti-extension drill. If the back arches, reduce the range.", "yt": "dead bug exercise McGill form", "volumePriority": 1, "level": "foundation", "anchor": true}, {"id": "dead_bug_weighted", "name": "Weighted Dead Bug (Heel Taps)", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Deep core, anti-extension", "why": "A progression of the dead bug \u2014 tapping the heel to the floor increases the anti-extension demand once the basic version is easy.", "cues": ["Same setup as the dead bug", "Lower one heel toward the floor", "Keep the lower back pressed flat the whole time", "Tap lightly, then return", "Stop if the back lifts"], "discNote": "GREEN normally, but a harder variation \u2014 on stiff days regress to the standard dead bug.", "yt": "dead bug heel tap progression", "volumePriority": 1, "level": "intermediate"}, {"id": "bird_dog", "name": "Bird-Dog", "pattern": "anti_rotation", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Multifidus, glutes, deep core", "why": "A McGill Big 3 staple. Trains the deep spinal stabilizers (multifidus) and glutes together while keeping the spine perfectly neutral \u2014 pure disc protection.", "cues": ["On hands and knees, spine neutral", "Extend the opposite arm and leg", "Keep the hips level \u2014 don't rotate", "Reach long, don't lift past parallel", "Return under control and switch"], "discNote": "GREEN: keep the spine neutral and hips square. A balance-a-glass-on-your-back level of control.", "yt": "bird dog exercise form McGill", "volumePriority": 1, "level": "foundation", "anchor": true}, {"id": "side_plank", "name": "Side Plank (Full or Knees)", "pattern": "anti_lateral_flexion", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Obliques, QL, lateral core", "why": "The third McGill Big 3 movement. Builds the lateral core and quadratus lumborum that brace the spine from the side \u2014 McGill's research-backed disc-sparing core trio.", "cues": ["On your side, elbow under the shoulder", "Lift the hips into a straight line", "Knees-down version is fine to start", "Hold steady, breathe", "Don't let the hips sag"], "discNote": "GREEN: low compression, high stability benefit. Use the knee version if the full plank is too much.", "yt": "side plank form McGill", "volumePriority": 1, "level": "foundation", "anchor": true}, {"id": "side_plank_reach", "name": "Side Plank with Reach-Through", "pattern": "anti_lateral_flexion", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "muscle": "Obliques, lateral core, t-spine rotation", "why": "Adds a controlled t-spine rotation to the side plank \u2014 building rotational control on top of lateral stability. A progression once side planks are solid.", "cues": ["Start in a side plank", "Reach the top arm under and through", "Rotate from the upper back", "Return to open position", "Keep the hips up throughout"], "discNote": "AMBER + stiff-day swap: rotation under load. On stiff days use a plain side plank hold.", "yt": "side plank reach through form", "volumePriority": 1, "level": "advanced"}, {"id": "front_plank", "name": "Front Plank", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Deep core, anti-extension", "why": "Teaches a braced, neutral spine against gravity. A simple anti-extension hold that reinforces the bracing you need to protect your back all day.", "cues": ["Forearms under shoulders", "Body in a straight line", "Squeeze glutes, ribs down", "Don't let the hips sag or pike", "Breathe steadily"], "discNote": "GREEN: the key is a neutral spine \u2014 don't let the lower back sag into extension.", "yt": "front plank proper form neutral spine", "volumePriority": 1, "level": "foundation"}, {"id": "pallof_iso_hold", "name": "Pallof Iso Hold", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Deep core, obliques", "why": "Holding the Pallof extended for time maximizes the anti-rotation time under tension \u2014 a pure stability hold with no movement to go wrong.", "cues": ["Press the handle straight out and hold", "Resist the cable's twist for the full count", "Hips square, ribs down", "Breathe while bracing", "Switch sides"], "discNote": "GREEN: an isometric, very back-safe way to load anti-rotation.", "yt": "pallof press iso hold form", "mayfair": true, "volumePriority": 1, "level": "foundation"}, {"id": "suitcase_carry", "name": "Suitcase Carry (Kettlebell)", "pattern": "carry", "region": "core", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": true, "muscle": "Lateral core, grip, traps", "why": "Carrying a weight on one side forces the core to resist side-bending \u2014 a powerful, functional anti-lateral-flexion drill that builds real-world spinal resilience.", "cues": ["Hold the kettlebell at one side", "Stand tall, shoulders level \u2014 don't lean", "Brace the core and walk slowly", "Keep the ribs stacked over the hips", "Switch sides for equal time"], "discNote": "AMBER + stiff-day drop: it carries load (compressive) and is kettlebell-based, so it's skipped on stiff days per your rule.", "yt": "suitcase carry form core", "volumePriority": 3, "level": "advanced"}, {"id": "kb_goblet_squat", "name": "Kettlebell Goblet Squat", "pattern": "knee_dominant", "region": "lower", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": false, "muscle": "Quads, glutes, core", "why": "Holding the weight in front keeps the torso upright and the spine neutral \u2014 a relatively back-friendly way to squat at home with your adjustable kettlebell.", "cues": ["Hold the bell at your chest", "Feet shoulder-width", "Sit down between the hips, chest up", "Only go as deep as you can keep a neutral spine", "Drive up through the heels"], "discNote": "AMBER + stiff-day drop: loaded squat carries compression and is kettlebell-based \u2014 skip on stiff days.", "yt": "goblet squat form neutral spine Squat University", "volumePriority": 3, "level": "advanced"}, {"id": "kb_deadlift", "name": "Kettlebell Deadlift", "pattern": "hip_hinge", "region": "lower", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": true, "muscle": "Glutes, hamstrings, back", "why": "Teaches a clean hip hinge \u2014 the single most important movement pattern for protecting your back in daily life. Done right, it builds a bulletproof posterior chain.", "cues": ["Kettlebell between the feet", "Hinge at the hips, neutral spine \u2014 flat back", "Push the hips back, soft knees", "Drive the hips forward to stand, squeeze glutes", "NEVER round the lower back"], "discNote": "AMBER + stiff-day drop: a hinge under load is high-reward but demands a perfect flat back. Skip on stiff days; never round.", "yt": "kettlebell deadlift hip hinge form Squat University", "volumePriority": 3, "level": "advanced"}, {"id": "kb_romanian_deadlift", "name": "Kettlebell Romanian Deadlift", "pattern": "hip_hinge", "region": "lower", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": true, "muscle": "Hamstrings, glutes", "why": "Targets the hamstrings and glutes through a hip hinge with a softer knee. Builds the posterior chain that takes strain off the lower back.", "cues": ["Soft knees, bell in both hands", "Push the hips back, slide the bell down the thighs", "Flat back the whole way", "Go to mid-shin or where the back stays neutral", "Squeeze glutes to stand"], "discNote": "AMBER + stiff-day drop: loaded hinge, kettlebell-based \u2014 skip when stiff.", "yt": "kettlebell romanian deadlift form", "volumePriority": 3, "level": "advanced"}, {"id": "mckenzie_press_up", "name": "McKenzie Prone Press-Up", "pattern": "decompression", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Spinal extension mobility", "why": "A McKenzie extension that encourages disc material to move away from the nerve \u2014 often the single best reset for a stiff or cranky lower back. Frequently relieving for herniated discs.", "cues": ["Lie face down", "Place hands under the shoulders", "Gently push the chest up, hips stay on the floor", "Let the lower back sag \u2014 relax it", "Hold a few seconds, repeat for reps"], "discNote": "GREEN and therapeutic \u2014 BUT if it sends pain or tingling down a leg, stop immediately. Centralizing (pain moving toward the spine) is good; peripheralizing is a stop signal.", "yt": "McKenzie press up extension AskDoctorJo", "volumePriority": 2, "level": "foundation"}, {"id": "single_knee_to_chest", "name": "Single Knee-to-Chest Stretch", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lower back, glute stretch", "why": "A gentle, spine-neutral way to ease lower-back tension and stretch the glutes. A reliable cool-down reset that calms a stiff back.", "cues": ["Lie on your back", "Draw one knee toward the chest", "Keep the other leg relaxed", "Gentle, no forcing", "Hold, then switch"], "discNote": "GREEN: single-leg (not double) keeps it gentle on the discs. Don't yank.", "yt": "single knee to chest stretch AskDoctorJo", "volumePriority": 2, "level": "foundation"}, {"id": "supine_hamstring_float", "name": "Supine Hamstring Stretch (Strap)", "pattern": "mobility_reset", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Hamstrings", "why": "Stretches tight hamstrings on your back, where the spine is supported and protected \u2014 far safer than a standing toe-touch, which loads the discs in flexion.", "cues": ["Lie on your back", "Loop a strap or towel around one foot", "Raise the leg with a slight knee bend", "Keep the lower back flat on the floor", "Hold the stretch, switch sides"], "discNote": "GREEN: the back-safe hamstring stretch. Replaces all standing toe-touch type stretches.", "yt": "supine hamstring stretch strap form", "volumePriority": 3, "level": "foundation"}, {"id": "hip_flexor_stretch", "name": "Half-Kneeling Hip Flexor Stretch", "pattern": "mobility_reset", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Hip flexors, psoas", "why": "Tight hip flexors from cycling and sitting pull the pelvis forward and strain the lower back. Releasing them is one of your stated goals and directly helps your discs.", "cues": ["Half-kneeling, one knee down on a pad", "Tuck the pelvis under slightly", "Gently push the hips forward", "Squeeze the glute of the down leg", "Stand tall \u2014 feel the stretch in the front of the hip"], "discNote": "GREEN: the pelvic tuck is what makes this safe and effective \u2014 don't arch the back to push further.", "yt": "kneeling hip flexor stretch Bob and Brad", "volumePriority": 4, "level": "foundation"}, {"id": "figure_four_stretch", "name": "Supine Figure-Four (Piriformis) Stretch", "pattern": "mobility_reset", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Glutes, piriformis", "why": "Releases the deep glute and piriformis, which can contribute to back and sciatic-type tightness. Done lying down, it keeps the spine safe.", "cues": ["Lie on your back, knees bent", "Cross one ankle over the opposite knee", "Pull the bottom thigh toward you", "Keep the head and back relaxed on the floor", "Hold, then switch"], "discNote": "GREEN: supine and gentle. Stop if you feel nerve symptoms down the leg.", "yt": "figure four piriformis stretch supine AskDoctorJo", "volumePriority": 3, "level": "foundation"}, {"id": "cat_cow", "name": "Standing or Quadruped Cat-Cow", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Spinal mobility", "why": "Gently moves the spine through flexion and extension to lubricate the joints and ease morning stiffness \u2014 a great unloaded warm-up to find a neutral, pain-free range.", "cues": ["On hands and knees (or standing, hands on thighs)", "Slowly round the back up (cat)", "Then gently arch and lift the chest (cow)", "Move within a comfortable, pain-free range", "Breathe with the movement"], "discNote": "GREEN: unloaded mobility. Keep the range comfortable; this is mobility, not a max stretch.", "yt": "cat cow stretch form Yoga With Adriene", "volumePriority": 2, "level": "foundation"}, {"id": "standing_decompression", "name": "Standing Bar Hang / Decompression", "pattern": "decompression", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Spinal decompression", "why": "A gentle hang lets gravity lengthen the spine and create space between the vertebrae \u2014 a soothing decompression to open warm-ups, especially on stiff days.", "cues": ["Grip a bar with feet lightly supporting some weight", "Relax and let the lower body hang", "Breathe and let the spine lengthen", "Don't force a full dead hang if it's too much", "Step down gently"], "discNote": "GREEN: decompressive and calming. Keep feet partly weighted if a full hang is too intense.", "yt": "bar hang decompression lower back", "volumePriority": 2, "level": "foundation"}, {"id": "glute_activation_clamshell", "name": "Clamshell (Band optional)", "pattern": "hip_activation", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Glute medius", "why": "Wakes up the side glutes before training so they stabilize the pelvis during your session \u2014 a key warm-up activation that protects the lower back.", "cues": ["Lie on your side, knees bent and stacked", "Keep the feet together", "Open the top knee like a clamshell", "Don't let the hips roll back", "Controlled, feel the side glute"], "discNote": "GREEN: gentle activation, no spinal load.", "yt": "clamshell exercise glute medius form", "volumePriority": 3, "level": "foundation"}, {"id": "bird_dog_crunch", "name": "Bird-Dog with Elbow-to-Knee", "pattern": "anti_rotation", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Multifidus, deep core, glutes", "why": "A bird-dog progression \u2014 bringing the elbow to the knee between reps adds a dynamic stability challenge once the standard hold is easy.", "cues": ["From a bird-dog extended position", "Draw the elbow and knee together under the body", "Re-extend without letting the hips rotate", "Spine stays neutral throughout", "Slow and controlled"], "discNote": "AMBER + stiff-day swap: the dynamic element is harder to control \u2014 regress to a standard bird-dog when stiff.", "yt": "bird dog crunch progression form", "volumePriority": 1, "level": "advanced"}, {"id": "reverse_hyper_light", "name": "Light Reverse Hyperextension (Machine/Bench)", "pattern": "hip_hinge", "region": "lower", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Glutes, hamstrings, spinal erectors", "why": "Lightly trains the glutes and spinal erectors with a gentle traction effect on the lower back. Some people with disc issues find light reverse hypers relieving.", "cues": ["Torso supported on the pad, hips at the edge", "Raise the legs to body height \u2014 no higher", "Squeeze the glutes", "Don't hyperextend the lower back", "Light and controlled"], "discNote": "AMBER + stiff-day swap: keep it light and avoid overextension. Skip when stiff; sub a glute bridge.", "yt": "reverse hyperextension form lower back", "volumePriority": 3, "level": "advanced"}, {"id": "wall_sit", "name": "Wall Sit", "pattern": "knee_dominant", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Quads, isometric legs", "why": "An isometric quad builder with the back flat against the wall \u2014 supported, simple, and zero spinal load. A solid stiff-day leg option.", "cues": ["Back flat against the wall", "Slide down to about 90 degrees at the knees", "Keep the whole back in contact with the wall", "Hold for time", "Push through the heels to stand"], "discNote": "GREEN: the wall supports a neutral spine. Good on stiff days.", "yt": "wall sit form", "volumePriority": 4, "level": "foundation"}, {"id": "thoracic_rotation", "name": "Quadruped Thoracic Rotation", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Thoracic spine mobility", "why": "Builds rotation where it should come from \u2014 the upper back \u2014 so your golf and squash swings don't force the rotation into the vulnerable lumbar discs. Directly golf-relevant.", "cues": ["On hands and knees, one hand behind the head", "Rotate the elbow down and under", "Then open up, rotating the elbow to the ceiling", "Move from the upper back, keep the lower back still", "Follow the elbow with the eyes"], "discNote": "GREEN: trains t-spine rotation while sparing the lumbar spine. Excellent for golfers with disc issues.", "yt": "quadruped thoracic rotation mobility form", "volumePriority": 2, "level": "foundation"}, {"id": "open_book", "name": "Open Book Thoracic Stretch", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Thoracic rotation, chest", "why": "A side-lying rotation that opens the upper back and chest \u2014 improving the thoracic mobility that keeps rotational load out of your lower back during sport.", "cues": ["Lie on your side, knees bent, arms together in front", "Open the top arm across to the other side", "Let the head and upper back follow", "Keep the knees together and still", "Breathe into the stretch"], "discNote": "GREEN: rotation isolated to the upper back; lower spine stays stacked and quiet.", "yt": "open book stretch thoracic mobility", "volumePriority": 4, "level": "foundation"}, {"id": "scapular_pullup", "name": "Scapular Pull-Up / Pulldown", "pattern": "vertical_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Lower traps, scapular control", "why": "Trains the small but crucial scapular control muscles that set the foundation for all pulling and good posture. A great upper-body warm-up move.", "cues": ["Hang or hold the pulldown bar with straight arms", "Without bending the elbows, pull the shoulder blades down", "Small range \u2014 just the scapulae moving", "Pause, then release slowly", "Feel the lower traps"], "discNote": "GREEN: minimal load, sets up healthy shoulders.", "yt": "scapular pull up form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "band_pull_apart", "name": "Band Pull-Apart", "pattern": "horizontal_pull", "region": "upper", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Rear delts, mid-traps, rhomboids", "why": "A simple, low-risk posture and upper-back activator \u2014 perfect for warming up the shoulders and mid-back before pressing or pulling.", "cues": ["Hold a band at shoulder height, arms straight", "Pull the band apart to the chest", "Squeeze the shoulder blades", "Keep the ribs down \u2014 don't arch", "Slow return"], "discNote": "GREEN: stand tall, no spinal load.", "yt": "band pull apart form", "volumePriority": 2, "level": "foundation"}, {"id": "cable_woodchop_high_low", "name": "Cable Woodchop (High-to-Low)", "pattern": "anti_rotation", "region": "core", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "muscle": "Obliques, core, hips", "why": "A dynamic, athletic rotation that mimics the golf swing's downswing \u2014 trained with hip drive so the power comes from the hips, not the lumbar spine.", "cues": ["Cable set high, stand side-on", "Pull down and across to the opposite hip", "PIVOT the back foot, rotate from the hips", "Keep the arms fairly straight, let the body turn", "Lower back stays neutral \u2014 hips do the work"], "discNote": "AMBER + stiff-day swap: dynamic rotation under load. On stiff days use a Pallof iso hold instead.", "yt": "cable woodchop high to low form golf", "mayfair": true, "volumePriority": 1, "level": "advanced"}, {"id": "farmers_carry", "name": "Farmer's Carry (Two Kettlebells)", "pattern": "carry", "region": "core", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": false, "muscle": "Grip, traps, core, full body", "why": "Loaded carries build total-body and core stability and teach you to stay tall and braced under load \u2014 translating to a more resilient spine in daily life.", "cues": ["A kettlebell in each hand", "Stand tall, shoulders back, ribs down", "Brace the core, walk with control", "Don't lean or let the shoulders round", "Short, steady steps"], "discNote": "AMBER + stiff-day drop: compressive load and kettlebell-based \u2014 skipped on stiff days.", "yt": "farmers carry form posture", "volumePriority": 3, "level": "advanced"}, {"id": "kb_halo", "name": "Kettlebell Halo", "pattern": "mobility_reset", "region": "upper", "equipment": "kettlebell", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Shoulders, t-spine mobility, core", "why": "Circling the bell around the head mobilizes the shoulders and upper back while the core stays braced \u2014 a nice dynamic warm-up with your home kettlebell.", "cues": ["Hold the bell by the horns at the chest", "Circle it slowly around the head", "Keep the core braced, ribs down \u2014 don't arch", "Move only the arms and shoulders", "Reverse direction"], "discNote": "AMBER + stiff-day drop: kettlebell-based; the bracing is easy to lose. Skip when stiff.", "yt": "kettlebell halo form", "volumePriority": 2, "level": "advanced"}, {"id": "hollow_hold", "name": "Hollow Body Hold (Tucked)", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Deep core, anti-extension", "why": "A strong anti-extension hold that teaches you to keep the lower back pinned. The tucked version keeps it manageable and disc-safe.", "cues": ["Lie on your back, knees tucked", "Press the lower back firmly into the floor", "Lift the shoulders and feet slightly", "Lower back MUST stay flat \u2014 no gap", "Hold for time, breathe"], "discNote": "AMBER + stiff-day swap: only safe if the lower back stays pinned. If it lifts, regress to a dead bug. Skip when stiff.", "yt": "hollow body hold tucked form", "volumePriority": 1, "level": "advanced"}, {"id": "seated_row_wide", "name": "Wide-Grip Seated Cable Row", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Upper back, rear delts, rhomboids", "why": "A wide grip shifts the emphasis to the upper back and rear delts \u2014 a useful rotation from the neutral-grip row for fuller back development.", "cues": ["Sit tall, neutral spine", "Use a wide bar attachment", "Pull to the upper abdomen, elbows flaring slightly", "Squeeze the upper back", "Don't round forward on the return"], "discNote": "AMBER: keep the spine neutral; the risk is the same forward-rounding as any seated row.", "yt": "wide grip seated row form", "mayfair": true, "volumePriority": 2, "level": "intermediate"}, {"id": "machine_rear_delt", "name": "Machine Reverse Fly (Rear Delt)", "pattern": "horizontal_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Rear delts, mid-traps", "why": "Isolates the rear delts with chest support \u2014 building the back-of-shoulder strength that pulls you out of a hunched, disc-straining posture.", "cues": ["Chest on the pad", "Arms out, slight elbow bend", "Open the arms back in an arc", "Squeeze the rear delts and mid-back", "Control the return"], "discNote": "GREEN: chest-supported, no lumbar load.", "yt": "machine reverse fly rear delt form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "overhead_tricep_cable", "name": "Overhead Cable Tricep Extension", "pattern": "vertical_push", "region": "upper", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Triceps (long head)", "why": "Hits the long head of the triceps through a big stretch. Standing, so it asks for a little core bracing to avoid arching.", "cues": ["Face away from the cable, rope overhead", "Extend the arms forward and up", "Keep the elbows from flaring too wide", "Ribs down \u2014 don't let the back arch", "Control the stretch back"], "discNote": "AMBER: the overhead position tempts a lower-back arch. Brace and keep ribs down.", "yt": "overhead cable tricep extension form", "mayfair": true, "volumePriority": 2, "level": "intermediate"}, {"id": "hammer_curl_cable", "name": "Cable Hammer Curl (Rope)", "pattern": "horizontal_pull", "region": "upper", "equipment": "cable", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Biceps, brachialis, forearms", "why": "A neutral-grip curl that builds arm thickness and forearm strength \u2014 useful grip for squash racquet control. Low-risk standing isolation.", "cues": ["Rope attachment, neutral grip", "Elbows pinned at the sides", "Curl up keeping the thumbs up", "No swinging from the back", "Lower slowly"], "discNote": "GREEN: keep the torso still.", "yt": "cable hammer curl rope form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "seated_calf_machine", "name": "Seated Calf Raise Machine", "pattern": "knee_dominant", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Soleus, calves", "why": "The seated version loads the calves with the weight on the knees, not the spine \u2014 a fully back-safe way to train the lower legs.", "cues": ["Pads on the lower thighs", "Balls of the feet on the platform", "Press up onto the toes", "Full stretch at the bottom", "Controlled reps"], "discNote": "GREEN: the load sits on the thighs, not the spine.", "yt": "seated calf raise machine form", "mayfair": true, "volumePriority": 4, "level": "foundation"}, {"id": "nordic_negative_assisted", "name": "Assisted Nordic Hamstring (Negative)", "pattern": "hip_hinge", "region": "lower", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Hamstrings (eccentric)", "why": "An advanced hamstring builder done as slow negatives. Strong hamstrings are protective for the back, but this is demanding \u2014 keep the hips locked.", "cues": ["Kneel with the ankles anchored", "Keep a straight line from knees to head", "Lower slowly under control", "Squeeze the glutes \u2014 DON'T let the hips hinge", "Catch with the hands and push back up"], "discNote": "AMBER + stiff-day swap: the key is keeping the hips extended so it doesn't become a back movement. Skip when stiff; sub a leg curl.", "yt": "assisted nordic hamstring curl negative form", "volumePriority": 3, "level": "advanced"}, {"id": "deadbug_pullover", "name": "Dead Bug with Cable/KB Pullover", "pattern": "anti_extension", "region": "core", "equipment": "kettlebell", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Deep core, lats, anti-extension", "why": "Combines the dead bug's anti-extension with a lat-loaded pullover, raising the core-bracing challenge while keeping the back pinned.", "cues": ["Dead bug position, holding a light weight overhead", "Press the lower back into the floor", "Move the limbs while resisting the back arching", "Keep the weight light", "Stop if the back lifts"], "discNote": "AMBER + stiff-day drop: the overhead load increases the anti-extension demand and it's kettlebell-based \u2014 skip when stiff, regress to plain dead bug.", "yt": "dead bug pullover core form", "volumePriority": 1, "level": "advanced"}, {"id": "incline_walk", "name": "Incline Treadmill Walk", "pattern": "mobility_reset", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Glutes, calves, conditioning", "why": "A back-friendly conditioning and fat-loss tool \u2014 walking uphill builds the glutes and burns calories without the impact or spinal jarring of running.", "cues": ["Set a moderate incline", "Walk tall, don't hold the rails", "Natural arm swing", "Steady, sustainable pace", "Keep the core gently engaged"], "discNote": "GREEN: low-impact, upright, supports your fat-loss goal without spinal stress.", "yt": "incline treadmill walk fat loss", "volumePriority": 3, "level": "foundation"}, {"id": "recumbent_bike", "name": "Recumbent Bike", "pattern": "mobility_reset", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Quads, conditioning", "why": "The most back-friendly cardio \u2014 the reclined, supported position means zero spinal load while you warm up or do steady-state conditioning.", "cues": ["Adjust the seat so the knees aren't over-bending", "Sit back into the support", "Steady cadence", "Light resistance for warm-ups", "Relax the upper body"], "discNote": "GREEN: the supported recline is ideal for a back-friendly warm-up.", "yt": "recumbent bike form", "volumePriority": 4, "level": "foundation"}, {"id": "pelvic_tilt", "name": "Supine Pelvic Tilt", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Deep core, lumbar control", "why": "Teaches you to find and control a neutral pelvis \u2014 the foundational skill behind every safe lift. A gentle activator that calms a stiff back.", "cues": ["Lie on your back, knees bent", "Gently flatten the lower back into the floor", "Then return to neutral", "Small, controlled movement", "Breathe and feel the deep core engage"], "discNote": "GREEN: the gentlest core activation; good on the stiffest days.", "yt": "pelvic tilt exercise form AskDoctorJo", "volumePriority": 2, "level": "foundation"}, {"id": "bear_hold", "name": "Bear Hold / Bear Crawl Hold", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Deep core, shoulders, quads", "why": "Holding a hover on hands and toes with a flat back is a potent anti-extension and full-body brace \u2014 a step up from the plank family.", "cues": ["Hands and knees, knees an inch off the floor", "Flat back, neutral spine", "Brace hard, breathe", "Don't let the lower back sag", "Hold for time"], "discNote": "AMBER + stiff-day swap: demanding brace; if the back sags it's a problem. Skip when stiff, use a front plank.", "yt": "bear hold core form", "volumePriority": 1, "level": "advanced"}, {"id": "bird_dog_row", "name": "Bird-Dog Row (Bench-Supported)", "pattern": "horizontal_pull", "region": "upper", "equipment": "kettlebell", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "source": "physio", "muscle": "Lats, mid-back, anti-rotation core", "why": "Your physio's pick. A row done in a braced bird-dog position over a bench \u2014 it builds the back while forcing the core to resist rotation. A two-for-one of pulling strength and spinal stability.", "cues": ["One hand and knee on the bench, other foot on the floor", "Flat, neutral spine \u2014 like a tabletop", "Row the weight to the hip without rotating the torso", "Keep the hips square to the floor", "Control the weight down"], "discNote": "AMBER + stiff-day swap: the anti-rotation demand is great, but it's done unsupported over a bench. On stiff days use the chest-supported machine row.", "yt": "bird dog row form", "volumePriority": 2, "level": "advanced"}, {"id": "kickstand_deadlift", "name": "Kickstand Deadlift (Kettlebell)", "pattern": "hip_hinge", "region": "lower", "equipment": "kettlebell", "safety": "amber", "compressive": true, "stiffDayDrop": true, "golf": true, "source": "physio", "muscle": "Glutes, hamstrings, single-leg posterior chain", "why": "Your physio's pick. A near-single-leg hinge with the back foot as a light kickstand \u2014 it builds the glutes and teaches a clean hinge with less load than a full deadlift, and trains each side evenly.", "cues": ["Most weight on the front leg, back toe lightly down", "Hinge at the hips, flat back", "Push the hips back, slide the weight down the front leg", "Drive the front hip forward to stand", "Never round the lower back"], "discNote": "AMBER + stiff-day drop: a loaded hinge, kettlebell-based. Excellent when the back is good; skip when stiff.", "yt": "kickstand deadlift form", "volumePriority": 3, "level": "advanced"}, {"id": "landmine_rotation", "name": "Landmine Rotation", "pattern": "anti_rotation", "region": "core", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "source": "physio", "muscle": "Obliques, shoulders, hips, rotational power", "why": "Your physio's pick, and a superb golf-carryover move. The bar's arc trains controlled rotational power driven by the hips and trunk \u2014 building the rotational strength that lets your lumbar spine stop over-rotating.", "cues": ["Hold the bar end at chest height, arms extended", "Rotate the bar side to side in an arc", "PIVOT the feet and drive from the hips", "Keep the arms long, let the body turn", "Lower back stays neutral \u2014 hips and t-spine do the rotating"], "discNote": "AMBER + stiff-day swap: dynamic rotation. The safety is in rotating from hips/t-spine, not the lumbar. On stiff days use a Pallof iso hold.", "yt": "landmine rotation form golf", "mayfair": true, "volumePriority": 1, "level": "advanced"}, {"id": "plank_pull_through", "name": "Plank Pull-Through (Feet on Bench)", "pattern": "anti_rotation", "region": "core", "equipment": "kettlebell", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "source": "physio", "muscle": "Deep core, obliques, anti-rotation, shoulders", "why": "Your physio's pick. From a plank, dragging a weight across forces the core to resist both rotation and extension at once \u2014 a high-level stability builder with strong sport carryover.", "cues": ["Plank position, feet elevated on a bench", "Reach across and drag the weight to the other side", "Fight to keep the hips dead level \u2014 no twisting", "Brace the core hard throughout", "Slow and deliberate, not rushed"], "discNote": "AMBER + stiff-day drop: elevated-feet plank plus anti-rotation load is demanding; kettlebell-based. Skip when stiff; use a Pallof iso hold or side plank.", "yt": "plank pull through form", "volumePriority": 1, "level": "advanced"}, {"id": "machine_back_extension_neutral", "name": "Machine Back Extension (to Neutral Only)", "pattern": "hip_hinge", "region": "lower", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "source": "swap", "swapFor": "Roman Chair Extension", "muscle": "Spinal erectors, glutes (endurance)", "why": "A disc-safer replacement for the loaded Roman chair extension. Trains the same erector endurance, but you stop at a FLAT, neutral spine instead of hyperextending \u2014 getting the benefit without driving the herniated segment into end-range.", "cues": ["Set the machine so the pivot is at the hip, not the waist", "Lower under control", "Raise ONLY to a flat, neutral spine \u2014 never arch past straight", "No added weight to start \u2014 bodyweight only", "Slow, controlled, low reps"], "discNote": "AMBER + stiff-day drop: this is the controlled swap for the Roman chair. The non-negotiable cue is STOP AT NEUTRAL \u2014 no hyperextension, no plate held to the chest. Skip entirely when stiff.", "yt": "back extension to neutral lower back safe form", "volumePriority": 3, "level": "advanced"}, {"id": "machine_ab_crunch_supported", "name": "Machine Ab Crunch (Supported, Limited Range)", "pattern": "anti_extension", "region": "core", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Rectus abdominis", "why": "A back-supported way to train the abs directly. The machine guides a controlled, partial range so you're not free-crunching into deep spinal flexion. Use as a controlled alternative when you want direct ab work.", "cues": ["Back against the pad, adjust for a small range", "Crunch by shortening the abs, not yanking the neck", "Keep it a SHORT range \u2014 no deep rounding", "Control the return", "Light to moderate load"], "discNote": "AMBER + stiff-day drop: flexion under load is normally off-limits for you; the machine version limits range and supports the spine, but keep it shallow. Dead bug and planks are the safer default \u2014 use this sparingly. Skip when stiff.", "yt": "machine ab crunch form", "volumePriority": 1, "level": "advanced"}, {"id": "torso_rotation_machine", "name": "Seated Torso Rotation Machine (Light)", "pattern": "anti_rotation", "region": "core", "equipment": "machine", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": true, "muscle": "Obliques, rotational strength", "why": "A seated machine that trains rotation through a controlled, supported range. Useful for building golf/squash rotational strength when used LIGHT and within a comfortable range \u2014 the support helps isolate the rotation.", "cues": ["Sit tall, secure the pads", "Rotate through a small, comfortable range", "Move slowly \u2014 never ballistic or end-range", "Keep it light; this is control, not max load", "Stop well before any pinch or strain"], "discNote": "AMBER + stiff-day drop: rotation machines can load the lumbar discs if used heavy or to end-range. LIGHT and short-range only. Many disc patients avoid these entirely \u2014 treat with caution and skip when stiff. The Pallof and cable chop are the safer rotational picks.", "yt": "seated rotation machine form caution", "volumePriority": 1, "level": "advanced"}, {"id": "machine_assisted_dip", "name": "Assisted Dip (Machine)", "pattern": "vertical_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Chest, triceps, front delts", "why": "The assisted dip builds pressing strength through a vertical push pattern with the spine in a neutral, braced position. A good machine alternative for chest and triceps.", "cues": ["Set the assist for 8-10 clean reps", "Stay fairly upright, ribs down", "Lower until the upper arms are about parallel", "Don't sink into the shoulders", "Press up under control"], "discNote": "GREEN: braced, neutral spine. Keep the core gently engaged so you don't arch.", "yt": "assisted dip machine form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "t_bar_chest_supported", "name": "Chest-Supported T-Bar / Machine Row (Wide)", "pattern": "horizontal_pull", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Mid-back, lats, rhomboids", "why": "Another chest-supported rowing angle for back thickness with zero lumbar load. Rotating between chest-supported row variations keeps the back developing while always sparing the spine.", "cues": ["Chest firmly on the pad", "Pull with the elbows, squeeze the mid-back", "Don't lift the chest off the pad to cheat", "Full controlled range", "Pause at the squeeze"], "discNote": "GREEN: chest support means no spinal load. A stiff-day-friendly back builder.", "yt": "chest supported t bar row form", "mayfair": true, "volumePriority": 2, "level": "foundation"}, {"id": "cable_pull_through", "name": "Cable Pull-Through", "pattern": "hip_hinge", "region": "lower", "equipment": "cable", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Glutes, hamstrings", "why": "Teaches the hip hinge with the load coming from BEHIND via the cable, not pressing down on the spine \u2014 so you get hinge and glute training with far less compression than a deadlift. A great hinge option for a sensitive back.", "cues": ["Face away from the low cable, rope between the legs", "Hinge at the hips, flat back", "Push the hips back, let the rope pull between the legs", "Drive the hips forward and squeeze the glutes", "Neutral spine throughout \u2014 no rounding"], "discNote": "AMBER: the horizontal load direction is gentler on the discs than top-down loading, but it's still a hinge \u2014 keep the back flat. A good bridge between glute bridges and loaded deadlifts.", "yt": "cable pull through hip hinge form", "mayfair": true, "volumePriority": 3, "level": "intermediate"}, {"id": "dead_bug_march", "name": "Dead Bug March (Feet)", "pattern": "anti_extension", "region": "core", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "muscle": "Deep core, anti-extension", "why": "A gentle dead bug variation \u2014 marching the feet while keeping the back pinned. A fresh rotation within the anti-extension core slot so you're not doing the identical dead bug every time.", "cues": ["On your back, knees over hips", "Press the lower back into the floor", "Lower one foot to tap, then the other (march)", "Keep the lower back flat the whole time", "Slow, controlled tempo"], "discNote": "GREEN: a back-safe dead bug variant. Regress range if the back lifts.", "yt": "dead bug march form", "volumePriority": 1, "level": "foundation"}, {"id": "copenhagen_plank_short", "name": "Short-Lever Copenhagen Plank", "pattern": "anti_lateral_flexion", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": true, "golf": false, "muscle": "Adductors, lateral core", "why": "A side-plank variation with the top leg on a bench \u2014 builds the adductors and lateral core together, adding variety to the anti-lateral-flexion slot. The short-lever (knee) version keeps it manageable.", "cues": ["Side plank position, top shin/knee on a bench", "Lift the hips into a straight line", "Hold steady \u2014 don't let the hips drop", "Keep the bottom leg relaxed", "Build time gradually"], "discNote": "AMBER + stiff-day swap: a harder lateral-core hold. Use a standard side plank when stiff.", "yt": "copenhagen plank short lever form", "volumePriority": 1, "level": "advanced"}, {"id": "world_greatest_stretch", "name": "World's Greatest Stretch", "pattern": "mobility_reset", "region": "core", "equipment": "bodyweight", "safety": "amber", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Hips, t-spine, hamstrings (mobility)", "why": "A full-body mobility flow hitting the hip flexors, hamstrings, and t-spine rotation in one sequence \u2014 efficient prep for the rotational demands of golf and squash.", "cues": ["Step into a deep lunge", "Drop the back knee, feel the hip flexor", "Place one hand down, rotate the other arm to the ceiling", "Rotate from the upper back", "Move slowly through the range"], "discNote": "AMBER: keep the rotation in the t-spine and the lunge controlled; don't force the lower back to twist.", "yt": "worlds greatest stretch form", "volumePriority": 2, "level": "intermediate"}, {"id": "glute_press_machine", "name": "Glute Press Machine", "pattern": "hip_hinge", "region": "lower", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "mayfair": true, "muscle": "Glutes, hamstrings", "why": "A standout for your back: it builds the glutes powerfully with your torso braced and supported, so there's no spinal load at all. Strong glutes drive hip extension so your lower back doesn't have to.", "cues": ["Set up with the torso supported on the pad", "Press the platform back through the heel", "Squeeze the glute hard at full extension", "Finish with the glute, NOT by arching the back", "Control the return, keep the core gently braced"], "discNote": "GREEN: torso-supported, no compression. A top pick as your main glute builder. Safe on stiff days.", "yt": "glute press machine form", "volumePriority": 3, "level": "foundation", "anchor": true}, {"id": "seated_tricep_dip_machine", "name": "Seated Triceps Dip Machine", "pattern": "vertical_push", "region": "upper", "equipment": "machine", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": false, "mayfair": true, "muscle": "Triceps, chest, front delts", "why": "A back-supported dip pattern \u2014 builds the triceps and lower chest with the spine braced against the pad, none of the shoulder or spinal stress of bodyweight dips.", "cues": ["Back against the pad, grip the handles", "Press down to lockout", "Keep the shoulders down, ribs down", "Don't shrug or lean forward", "Control the way back up"], "discNote": "GREEN: seated and supported. A safe triceps builder.", "yt": "seated dip machine triceps form", "volumePriority": 2, "level": "foundation"}, {"id": "ninety_ninety_hip", "name": "90/90 Hip Switch", "pattern": "mobility_reset", "region": "lower", "equipment": "bodyweight", "safety": "green", "compressive": false, "stiffDayDrop": false, "golf": true, "muscle": "Hip rotation mobility", "why": "Opens up internal and external hip rotation \u2014 the mobility that lets your hips do the turning in a golf swing so your lower back doesn't have to. Directly targets your post-sport stiffness at the source.", "cues": ["Sit with both knees bent at 90 degrees, one in front, one to the side", "Keep the chest tall", "Rotate the knees to switch sides", "Move slowly, stay upright", "Go only as far as comfortable"], "discNote": "GREEN: seated hip mobility, spine stays tall and neutral. Excellent for golfers.", "yt": "90 90 hip switch mobility form", "volumePriority": 4, "level": "foundation"}]};
 </script>
+<script>/* ============================================================
+   SpineStrong Engine — single source of truth + session generator
+   Reads exercises.json corpus + sessionRules. Persists to localStorage.
+   Views (Today / Week / Dashboard) all read from this.
+   ============================================================ */
+
+const SS = (function(){
+  const LS_KEY = 'spinestrong_v1';
+  let CORPUS = [];      // 87 exercises
+  let RULES = {};       // meta.sessionRules
+  let BYID = {};
+
+  // ---- DATA MODEL (persisted) ----
+  // model = { startDate, plan:[{date, type, status, sessionId}], log:{sessionId:{...}}, prefs:{} }
+  let model = null;
+
+  function todayISO(d){ d=d||new Date(); return d.toISOString().slice(0,10); }
+  function addDays(iso,n){ const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return todayISO(d); }
+  function dow(iso){ return new Date(iso+'T00:00:00').getDay(); } // 0=Sun
+
+  // Day-type rotation: 3 flexible days/week. Default Upper / Lower / Upper.
+  // Each day has SLOTS — ordered recipes that pull a specific kind of exercise, so the
+  // important builders (shoulder press, rows, arms) always land where they belong.
+  // slot: {role, pattern(s), region, prefer:[ids], avoid:[ids]} — first eligible match wins.
+  const DAY_TYPES = {
+    upper_a: { name:'Upper Body — Shoulders & Back', effort:7, slots:[
+      {role:'Vertical pull',   patterns:['vertical_pull'],   prefer:['lat_pulldown_wide','assisted_pullup']},
+      {role:'Horizontal pull (anchor)', patterns:['horizontal_pull'], prefer:['chest_supported_row','seated_cable_row'], anchor:true},
+      {role:'Shoulder press',  patterns:['vertical_push'],    prefer:['machine_shoulder_press']},
+      {role:'Lateral raise (width)', patterns:['vertical_push'], prefer:['cable_lateral_raise','machine_lateral_raise'], region:'shoulders'},
+      {role:'Rear delt / upper back', patterns:['horizontal_pull'], prefer:['face_pull','machine_rear_delt','band_pull_apart']}
+    ]},
+    upper_b: { name:'Upper Body — Push & Arms', effort:7, slots:[
+      {role:'Horizontal push',  patterns:['horizontal_push'], prefer:['machine_chest_press','incline_machine_press']},
+      {role:'Shoulder press',   patterns:['vertical_push'],   prefer:['machine_shoulder_press']},
+      {role:'Lateral raise (width)', patterns:['vertical_push'], prefer:['machine_lateral_raise','cable_lateral_raise']},
+      {role:'Biceps',           patterns:['horizontal_pull'], prefer:['cable_bicep_curl','hammer_curl_cable']},
+      {role:'Triceps',          patterns:['vertical_push','horizontal_push'], prefer:['tricep_pushdown','overhead_tricep_cable']}
+    ]},
+    lower: { name:'Lower — Glute & Hamstring', effort:6, slots:[
+      {role:'Glute press (anchor)', patterns:['hip_hinge','hip_activation'], prefer:['glute_press_machine'], anchor:true},
+      {role:'Hamstring',        patterns:['hip_hinge'],       prefer:['lying_leg_curl','seated_calf_machine']},
+      {role:'Hip thrust',       patterns:['hip_hinge','hip_activation'], prefer:['hip_thrust_machine','glute_bridge']},
+      {role:'Hip abduction',    patterns:['hip_activation'],  prefer:['hip_abductor_machine','glute_activation_clamshell']},
+      {role:'Knee / quad (light)', patterns:['knee_dominant'], prefer:['leg_press','leg_extension']}
+    ]},
+    presport: { name:'Pre-Sport — Mobility & Activation', effort:5, slots:[
+      {role:'Decompression',    patterns:['decompression','mobility_reset'], prefer:['standing_decompression','cat_cow']},
+      {role:'Hip mobility',     patterns:['mobility_reset'],  prefer:['hip_flexor_stretch','ninety_ninety_hip','world_greatest_stretch']},
+      {role:'Glute activation', patterns:['hip_activation'],  prefer:['glute_activation_clamshell','glute_bridge']},
+      {role:'Thoracic',         patterns:['mobility_reset'],  prefer:['thoracic_rotation','open_book']}
+    ]}
+  };
+  const WEEK_TEMPLATE = ['upper_a','lower','upper_b'];
+
+  function init(corpus, rules){
+    CORPUS = corpus; RULES = rules||{};
+    BYID = {}; corpus.forEach(e=>BYID[e.id]=e);
+    load();
+    if(!model) seed();
+    return SS;
+  }
+
+  function seed(){
+    const start = todayISO();
+    model = {
+      startDate:start,
+      log:{},                    // {sessionId:{date,type,weights,setsDone,exercises}}
+      overrides:{},              // {date:{skip|busy|move|sport|type}}
+      rotationCursor:0,
+      prefs:{
+        level:'foundation',
+        sessionsPerWeek:3,
+        preferredDays:[1,3,5],   // 0=Sun..6=Sat
+        minRestDays:1,
+        recurringSports:[],      // [{sport:'squash', day:2}]
+        noTrainDayBeforeSport:true,
+        easeInOnReturn:true,
+        paused:false,
+        pausedAt:null
+      }
+    };
+    save();
+  }
+
+  // ---- FORWARD-REGENERATING PLAN ----
+  // Plan is generated forward from a date, honoring rhythm (sessionsPerWeek, preferredDays,
+  // minRest), recurring sports, day-before-sport rule, and per-date overrides.
+  function buildPlan(fromISO, days){
+    fromISO = fromISO || todayISO();
+    days = days || 28;
+    const p = model.prefs;
+    const out = [];
+    const today = todayISO();
+    const sportByDow = {};
+    (p.recurringSports||[]).forEach(rs=>{ sportByDow[rs.day]=rs.sport; });
+
+    let lastTrain = null, weekKey=null, weekCount=0;
+    let cursor = model.rotationCursor||0;
+
+    for(let i=0;i<days;i++){
+      const date = addDays(fromISO, i);
+      const wd = dow(date);
+      const wk = isoWeek(date);
+      if(wk!==weekKey){ weekKey=wk; weekCount=0; }
+
+      const ov = model.overrides[date] || {};
+      const sport = ov.sport || sportByDow[wd] || null;
+      const logged = Object.values(model.log).find(s=>s.date===date);
+
+      if(p.paused && date>=(p.pausedAt||today) && date<=today){
+        out.push({date,type:'rest',status:'paused',sport}); continue;
+      }
+      if(ov.skip || ov.busy){
+        out.push({date,type:'rest',status:date<today?'skipped':'busy',sport,note:ov.busy?'busy':'skipped'}); continue;
+      }
+      if(logged){
+        out.push({date,type:logged.type,status:'done',sport,sessionId:logged.sessionId||null});
+        if(date<=today){ lastTrain=date; weekCount++; cursor++; }
+        continue;
+      }
+      if(date<today){ out.push({date,type:'rest',status:'gap',sport}); continue; }
+
+      // pinned session (from a move/push) — force a training day of that type
+      if(ov.pin){
+        out.push({date,type:ov.pin,status:'scheduled',sport,pinned:true});
+        lastTrain=date; weekCount++; cursor++;
+        continue;
+      }
+
+      // future: decide train vs rest
+      const isPreferred=(p.preferredDays||[]).includes(wd);
+      const underTarget=weekCount<(p.sessionsPerWeek||3);
+      const restOk=!lastTrain || daysBetween(lastTrain,date)>=(p.minRestDays||1);
+      let dayBeforeSport=false;
+      if(p.noTrainDayBeforeSport){
+        const tm=addDays(date,1), tDow=dow(tm), tOv=model.overrides[tm]||{};
+        if(tOv.sport||sportByDow[tDow]) dayBeforeSport=true;
+      }
+      if(isPreferred && underTarget && restOk && !dayBeforeSport && !sport){
+        const type=ov.type || WEEK_TEMPLATE[cursor%WEEK_TEMPLATE.length];
+        out.push({date,type,status:'scheduled',sport});
+        lastTrain=date; weekCount++; cursor++;
+      } else {
+        out.push({date,type:'rest',status:'rest',sport});
+      }
+    }
+    return out;
+  }
+  function isoWeek(iso){const d=new Date(iso+'T00:00:00');const day=(d.getDay()+6)%7;d.setDate(d.getDate()-day);return d.toISOString().slice(0,10);}
+  function daysBetween(a,b){return Math.abs(Math.round((new Date(b)-new Date(a))/86400000));}
+  function daysSinceLastSession(){const ds=Object.values(model.log).map(s=>s.date).sort();return ds.length?daysBetween(ds[ds.length-1],todayISO()):null;}
+  function returningFromLayoff(){const g=daysSinceLastSession();return g!=null&&g>=10;}
+
+  // ---- SESSION GENERATOR ----
+  // Build a concrete session (list of exercise ids w/ prescription) for a day type.
+  function pick(filterFn, n, exclude){
+    exclude=exclude||new Set();
+    const pool=CORPUS.filter(e=>filterFn(e)&&!exclude.has(e.id));
+    return pool.slice(0,n);
+  }
+
+  function restFor(e){
+    if(e.region==='core') return 45;
+    if(['vertical_push','hip_hinge','knee_dominant'].includes(e.pattern)) return 90;
+    if(['horizontal_pull','horizontal_push'].includes(e.pattern)) return 75;
+    return 60;
+  }
+  function repsFor(e){
+    if(e.region==='core') return (e.pattern==='anti_lateral_flexion'||e.id==='bird_dog')?'8/side':'10';
+    if(e.volumePriority>=3) return '12';
+    return '10';
+  }
+
+  function generateSession(type, opts){
+    opts=opts||{};
+    const level = model.prefs.level||'foundation';
+    const stiff = opts.stiff||false;
+    const dt = DAY_TYPES[type];
+    if(!dt) return null;
+    const used=new Set();
+
+    // level gate
+    const levelOk = e => {
+      if(level==='foundation') return e.level==='foundation';
+      if(level==='intermediate') return e.level!=='advanced';
+      return true;
+    };
+    // stiff-day: drop compressive + stiffDayDrop + kettlebell, green only
+    const stiffOk = e => !stiff || (!e.stiffDayDrop && !(e.equipment||'').toLowerCase().includes('kettlebell') && e.safety==='green');
+    const eligible = e => levelOk(e) && stiffOk(e);
+
+    // SLOT-BASED selection: fill each slot with its best available match.
+    // Tries prefer[] in order, then any eligible exercise matching the slot's patterns.
+    const lifts=[];
+    (dt.slots||[]).forEach(slot=>{
+      let chosen=null;
+      // 1) try preferred ids in order
+      for(const pid of (slot.prefer||[])){
+        const e=BYID[pid];
+        if(e && eligible(e) && !used.has(pid)){ chosen=e; break; }
+      }
+      // 2) fall back to any eligible exercise in the slot's patterns (by volume priority)
+      if(!chosen){
+        const pool=CORPUS.filter(e=> (slot.patterns||[]).includes(e.pattern)
+          && e.region!=='core' && eligible(e) && !used.has(e.id))
+          .sort((a,b)=>a.volumePriority-b.volumePriority);
+        if(pool.length) chosen=pool[0];
+      }
+      if(chosen){ lifts.push(chosen); used.add(chosen.id); }
+    });
+
+    // 3) Core anchors to interleave (McGill Big 3 + Pallof), unless "core at home"
+    const coreAnchors = CORPUS.filter(e=>e.anchor && e.region==='core' && levelOk(e) && stiffOk(e));
+    const coreToUse = opts.coreAtHome ? [] : coreAnchors.slice(0,4);
+
+    // 4) Interleave: lift, core, lift, core...
+    const mainLifts = lifts.filter(x=>x.region!=='core');
+    const seq=[];
+    let ci=0;
+    mainLifts.forEach((lift,i)=>{
+      seq.push(lift);
+      if(ci<coreToUse.length && i<mainLifts.length-0){ seq.push(coreToUse[ci]); ci++; }
+    });
+    while(ci<coreToUse.length){ seq.push(coreToUse[ci]); ci++; }
+
+    // ease-in after a layoff: lighter load + fewer sets (back-safe)
+    const easeIn = opts.easeIn!=null ? opts.easeIn : (model.prefs.easeInOnReturn && returningFromLayoff());
+
+    // 5) build prescription per exercise
+    const items = seq.map(e=>{
+      // weighted if it uses a cable/machine/weight; bodyweight (null) only for true BW moves
+      const eq=(e.equipment||'').toLowerCase();
+      const isWeighted = /cable|machine|kettlebell|weight|band|dumbbell/.test(eq);
+      let w = isWeighted ? suggestWeight(e.id) : null;
+      if(easeIn && w!=null) w = Math.max(5, Math.round((w*0.8)/5)*5);
+      return {
+        id:e.id, name:e.name, muscle:e.muscle||'', isCore:e.region==='core',
+        equipment:e.equipment||'', pattern:e.pattern, safety:e.safety, disc:e.discNote||'',
+        cues:e.cues||[], why:e.why||'', yt:(e.yt||'').replace(/ /g,'+'),
+        rx:{ sets: easeIn?2:3, reps:repsFor(e), tempo:'2-1-2', rest:restFor(e), weight:w }
+      };
+    });
+
+    let name = stiff?dt.name+' — Stiff-Day':dt.name;
+    if(easeIn) name = dt.name+' — Ease Back In';
+    return { type, name, effort: stiff?6:(easeIn?5:dt.effort),
+             stiff, easeIn, coreAtHome:!!opts.coreAtHome, items };
+  }
+
+  // progression: last logged weight, or baseline
+  const BASELINES = {seated_cable_row:45,machine_shoulder_press:35,cable_bicep_curl:50,tricep_pushdown:30,
+    chest_supported_row:45,machine_lateral_raise:15,lat_pulldown_wide:60,lat_pulldown_close:65,leg_press:135,
+    cable_lateral_raise:12,machine_chest_press:50,seated_row_wide:50,
+    pallof_press:25,pallof_overhead:20,cable_chop:25,cable_lift:25,cable_woodchop_high_low:25,
+    hip_thrust_machine:90,glute_press_machine:90,lying_leg_curl:50,leg_extension:50,
+    machine_rear_delt:30,hammer_curl_cable:25,overhead_tricep_cable:25,incline_machine_press:45,
+    hip_abductor_machine:60,hip_adductor_machine:60,seated_calf_machine:90,pec_deck:50};
+  function suggestWeight(id){
+    // find most recent log entry with this exercise
+    const entries=Object.values(model.log).filter(s=>s.weights&&s.weights[id]!=null)
+      .sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    if(entries.length) return entries[0].weights[id];
+    return BASELINES[id]!=null?BASELINES[id]:null;
+  }
+
+  // ---- SCHEDULING CONTROLS (override-based) ----
+  function setOverride(date, patch){ model.overrides[date]=Object.assign({},model.overrides[date],patch); save(); }
+  function clearOverride(date){ delete model.overrides[date]; save(); }
+  function skipDay(date){ setOverride(date,{skip:true}); }
+  function markBusy(date){ setOverride(date,{busy:true}); }
+  function markSport(date,sport){ if(sport) setOverride(date,{sport}); else { const o=model.overrides[date]||{}; delete o.sport; model.overrides[date]=o; save(); } }
+  function getTypeFor(date){ const pl=buildPlan(date,1); return pl[0]?pl[0].type:null; }
+
+  // MOVE JUST THIS ONE session forward N days, keeping its type. Original day becomes skipped,
+  // target day gets pinned to that session type (forces a training day there).
+  function pushSessionForward(date, days){
+    const t=getTypeFor(date);
+    if(!t || t==='rest') return;
+    const target=addDays(date,days);
+    setOverride(date,{skip:true});
+    setOverride(target,{pin:t});   // pin forces this type on the target day
+  }
+
+  // PUSH THE WHOLE CHAIN forward N days from `date`: this session and every scheduled
+  // session after it (in the upcoming window) each slide forward N days, preserving order.
+  function pushChainForward(date, days){
+    // capture upcoming scheduled sessions AND their types BEFORE any mutation
+    const upcoming=buildPlan(date,28).filter(p=>p.type!=='rest' && p.status!=='done' && p.date>=date);
+    const moves=upcoming.map(p=>({from:p.date, type:p.type}));   // type read from clean plan
+    if(!moves.length) return;
+    // now skip all originals
+    moves.forEach(m=>{ setOverride(m.from,{skip:true}); });
+    // then pin each shifted forward N days (skip if target already busy/skipped)
+    moves.forEach(m=>{ const tgt=addDays(m.from,days); const ov=model.overrides[tgt]||{}; if(!ov.skip && !ov.busy){ setOverride(tgt,{pin:m.type}); } });
+    save();
+  }
+
+  // recent skips (neutral info)
+  function recentSkips(){
+    const start=addDays(todayISO(),-14);
+    return buildPlan(start,15).filter(p=>p.date<todayISO() && (p.status==='gap'||p.status==='skipped'));
+  }
+
+  function pausePlan(){ model.prefs.paused=true; model.prefs.pausedAt=todayISO(); save(); }
+  function resumePlan(){ model.prefs.paused=false; model.prefs.pausedAt=null; save(); }
+  function setPrefs(patch){ model.prefs=Object.assign({},model.prefs,patch); save(); }
+  function addRecurringSport(sport,day){ model.prefs.recurringSports=model.prefs.recurringSports||[]; model.prefs.recurringSports.push({sport,day:+day}); save(); }
+  function removeRecurringSport(i){ model.prefs.recurringSports.splice(i,1); save(); }
+
+  // log a completed session (plan is derived, so we only store the log + advance cursor)
+  function logSession(type, items, opts){
+    opts=opts||{};
+    const id='s_'+Date.now();
+    const date=opts.date||todayISO();
+    const weights={}, setsDone={};
+    items.forEach(it=>{ if(it._weight!=null) weights[it.id]=it._weight; setsDone[it.id]=(it._sets||[]).filter(Boolean).length; });
+    model.log[id]={date,type,weights,setsDone,exercises:items.map(i=>i.id),sessionId:id};
+    model.rotationCursor=(model.rotationCursor||0)+1;
+    save();
+    return id;
+  }
+
+  // ---- DASHBOARD DATA ----
+  function stats(){
+    const sessions=Object.values(model.log);
+    const total=sessions.length;
+    const last30=sessions.filter(s=>s.date>=addDays(todayISO(),-30));
+    // weight-over-time per exercise
+    const byEx={};
+    sessions.forEach(s=>{ Object.entries(s.weights||{}).forEach(([id,w])=>{ (byEx[id]=byEx[id]||[]).push({date:s.date,w}); }); });
+    // streak: consecutive scheduled days done
+    return { totalSessions:total, last30:last30.length, byExercise:byEx,
+             planAdherence: adherence() };
+  }
+  function adherence(){
+    const start=addDays(todayISO(),-28);
+    const past=buildPlan(start,29).filter(p=>p.date<=todayISO());
+    const opps=past.filter(p=>['done','gap','skipped','scheduled'].includes(p.status));
+    if(!opps.length) return 0;
+    const done=past.filter(p=>p.status==='done').length;
+    return Math.round(100*done/opps.length);
+  }
+
+  // ---- persistence ----
+  function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(model)); }catch(e){} }
+  function load(){ try{ const r=localStorage.getItem(LS_KEY); model=r?JSON.parse(r):null; }catch(e){ model=null; } }
+  function exportData(){ return JSON.stringify(model); }
+  function importData(json){ try{ model=JSON.parse(json); save(); return true; }catch(e){ return false; } }
+  function reset(){ model=null; localStorage.removeItem(LS_KEY); seed(); }
+
+  return { init, generateSession, logSession, stats, adherence,
+           exportData, importData, reset,
+           // forward plan
+           buildPlan, getPlan(d,n){return buildPlan(d,n);},
+           getToday(){ const t=todayISO(); return buildPlan(t,1)[0]; },
+           // scheduling controls
+           setOverride, clearOverride, skipDay, markBusy, markSport, getTypeFor,
+           pushSessionForward, pushChainForward,
+           recentSkips, pausePlan, resumePlan,
+           setPrefs, addRecurringSport, removeRecurringSport,
+           // layoff
+           daysSinceLastSession, returningFromLayoff,
+           get model(){return model;}, get corpus(){return CORPUS;}, get prefs(){return model.prefs;},
+           DAY_TYPES, todayISO, addDays, dow };
+})();
+
+if(typeof module!=='undefined') module.exports=SS;
+</script>
+<script>
+SS.init(CORPUS_FULL.exercises, CORPUS_FULL.meta.sessionRules);
+
+// ---- seed demo data on first load so the test feels populated ----
+(function seedDemo(){
+  if(localStorage.getItem('ss_demo_seeded')) return;
+  // a few logged sessions for progress + a done day this week
+  const t=SS.todayISO(), A=SS.addDays;
+  const mk=(d,type,w)=>{const items=Object.entries(w).map(([id,wt])=>({id,_weight:wt,_sets:[true,true,true]}));SS.logSession(type,items,{date:d});};
+  mk(A(t,-16),'upper_a',{chest_supported_row:45,machine_shoulder_press:35,cable_lateral_raise:12,lat_pulldown_wide:60});
+  mk(A(t,-13),'lower',{glute_press_machine:90,lying_leg_curl:50,hip_thrust_machine:95});
+  mk(A(t,-11),'upper_b',{machine_chest_press:50,machine_shoulder_press:35,cable_bicep_curl:50,tricep_pushdown:30});
+  mk(A(t,-9),'upper_a',{chest_supported_row:50,machine_shoulder_press:40,cable_lateral_raise:15,lat_pulldown_wide:65});
+  mk(A(t,-4),'upper_b',{machine_chest_press:55,machine_shoulder_press:40,cable_bicep_curl:55,tricep_pushdown:35});
+  mk(A(t,-2),'upper_a',{chest_supported_row:55,machine_shoulder_press:45,cable_lateral_raise:15,lat_pulldown_wide:70});
+  SS.addRecurringSport('squash',2);
+  localStorage.setItem('ss_demo_seeded','1');
+})();
+
+const NAMES={}; CORPUS_FULL.exercises.forEach(e=>NAMES[e.id]=e.name);
+const CORE_IDS=CORPUS_FULL.exercises.filter(e=>e.region==='core').map(e=>e.id);
+const TYPE_ICON={upper_a:'🏋️',upper_b:'💪',lower:'🦵',presport:'🧘',rest:'·'};
+const SPORT_ICON={squash:'🎾',golf:'⛳',other:'🏃'};
+const TYPE_NAME={upper_a:'Upper — Shoulders & Back',upper_b:'Upper — Push & Arms',lower:'Lower — Glute & Ham',presport:'Pre-Sport Mobility',rest:'Rest Day'};
+let currentSession=null, openCard={}, weekSel=null, weekOff=0;
+
+// ===== ROUTER =====
+function nav(to){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===to));
+  document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.nav===to));
+  if(to==='today')renderToday(); if(to==='week')renderWeek(); if(to==='progress')renderProgress(); if(to==='prefs')renderPrefs();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-nav]').forEach(n=>n.onclick=()=>nav(n.dataset.nav));
+
+// ===== TODAY =====
+function getTodaySession(){
+  const today=SS.getToday();
+  if(!today || today.type==='rest'){ return {rest:true, plan:today}; }
+  if(!currentSession || currentSession._type!==today.type){
+    currentSession=SS.generateSession(today.type);
+    currentSession._type=today.type;
+  }
+  return {rest:false, session:currentSession, plan:today};
+}
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+const timers={}, intervals={};
+function renderToday(){
+  const el=document.getElementById('today');
+  const {rest,session,plan}=getTodaySession();
+  if(rest){
+    el.innerHTML=`<header><div class="logo">SpineStrong · Today</div><h1>Rest Day</h1><div class="sub">${plan&&plan.sport?SPORT_ICON[plan.sport]+' '+plan.sport+' today — enjoy it':'Recover — your back rebuilds between sessions.'}</div></header>
+    <div class="card" style="text-align:center;color:var(--muted);padding:30px 15px;line-height:1.5">No training scheduled today.<br>Next session is coming up — check the Week tab.</div>`;
+    return;
+  }
+  const items=session.items;
+  const saved=Object.values(SS.model.log).some(s=>s.date===SS.todayISO()&&s.type===session._type);
+  el.innerHTML=`<header><div class="logo">SpineStrong · Today</div><h1>${session.name}</h1><div class="sub">${session.easeIn?'Ease back in · ':''}${items.length} exercises · effort ${session.effort}/10</div>
+    <div class="progress-strip">${items.map(it=>`<div class="pdot ${it._done?'done':''}"></div>`).join('')}</div></header>
+    ${saved?'<div class="savetag">✓ Saved to your history — edit anything, it updates automatically</div>':''}
+    ${items.map((it,i)=>cardHTML(it,i)).join('')}`;
+  bindToday();
+}
+function cardHTML(c,i){
+  const w=c._weight!=null?c._weight:(c.rx.weight!=null?c.rx.weight:'');
+  const nSets=c.rx.sets||3; const sets=c._sets||[];
+  const setdots=Array.from({length:nSets},(_,k)=>`<button class="setdot ${sets[k]?'done':''}" data-set="${i}-${k}">${k+1}</button>`).join('');
+  const wRow=c.rx.weight!=null?`<div class="rxitem w"><div class="rxk">Weight</div><div class="rxv">${w}<span class="rxu">LB</span></div></div>`:`<div class="rxitem"><div class="rxk">Load</div><div class="rxv" style="font-size:11px">Body</div></div>`;
+  const img=IMGS[c.id]?`<div class="imgwell"><img src="${IMGS[c.id]}" alt="${c.name}"/></div>`:`<div class="imgwell" style="display:flex;align-items:center;justify-content:center;color:#888;font-size:11px">image: ${c.id} (in full app)</div>`;
+  const tleft=timers[i]!=null?timers[i]:c.rx.rest;
+  return `<div class="ex ${c.isCore?'core':''} ${openCard[i]?'open':''} ${c._done?'done':''}">
+    <div class="ex-head" data-toggle="${i}"><div class="ex-num">${c._done?'✓':(i+1)}</div>
+      <div class="ex-headinfo">${c.isCore?'<span class="ex-badge core">Core · active rest</span>':'<span class="ex-badge lift">Lift</span>'}<div class="ex-name">${c.name}</div><div class="ex-sub">${c.isCore?'Between lifts while resting':c.muscle}</div></div>
+      <span class="chev">▼</span></div>
+    <div class="ex-body">
+      <div class="rx"><div class="rxitem s"><div class="rxk">Sets</div><div class="rxv">${c.rx.sets}</div></div>
+        <div class="rxitem r"><div class="rxk">Reps</div><div class="rxv">${c.rx.reps}</div></div>
+        <div class="rxitem t"><div class="rxk">Tempo</div><div class="rxv">${c.rx.tempo}</div></div>${wRow}
+        <div class="rxitem k"><div class="rxk">Rest</div><div class="rxv">${c.rx.rest}<span class="rxu">S</span></div></div></div>
+      ${img}
+      <div class="mmap"><svg viewBox="0 0 60 110" width="42"><ellipse cx="30" cy="14" rx="8" ry="9" fill="#262b33"/><path d="M30 23 Q14 27 16 56 Q18 92 30 96 Q42 92 44 56 Q46 27 30 23Z" fill="#1f242c"/>${muscleHighlight(c)}</svg>
+        <div class="mmap-info"><div class="mmap-ttl">Muscles worked</div><div class="mmap-p">● ${c.muscle||'Target muscle'}</div></div></div>
+      ${c.why?`<div class="movedesc">${c.why}</div>`:''}
+      ${c.cues&&c.cues.length?`<div class="caps">${c.cues.slice(0,2).map((cue,ci)=>`<div class="cap ${ci===0?'setup':'focus'}"><span class="k">${ci===0?'Setup':'Focus'}</span><span class="v">${cue}</span></div>`).join('')}</div>`:''}
+      ${c.disc?`<div class="disc"><span>✓</span><span>${c.disc}</span></div>`:''}
+      <div class="logblock"><div class="logtop">
+        ${c.rx.weight!=null?`<div class="wt"><label>Weight</label><input type="number" value="${w}" data-wt="${i}"/><span style="font-size:11px;color:var(--muted)">lb</span></div>`:`<div class="wt"><label style="color:#9fd9a0">Bodyweight</label></div>`}
+        <div class="setdots"><span class="sl">Sets</span>${setdots}</div></div>
+        ${c.rx.weight!=null?`<div class="last">Suggested <b>${c.rx.weight} lb</b> — type your actual above; it'll track what you log</div>`:''}
+        <div class="timer"><div class="ring"><svg width="42" height="42" viewBox="0 0 42 42"><circle cx="21" cy="21" r="17" fill="none" stroke="#2a2d35" stroke-width="4"/><circle id="ring-${i}" cx="21" cy="21" r="17" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="107" stroke-dashoffset="${107*(1-tleft/c.rx.rest)}"/></svg><span class="tnum" id="tn-${i}">${fmt(tleft)}</span></div>
+          <div class="tinfo"><div class="tlabel">Rest between sets</div><div class="tsub">${c.rx.rest}s — recover</div></div>
+          <button class="tbtn" data-timer="${i}">${timers[i]!=null?'Stop':'Start'}</button></div>
+      </div>
+      <a class="vbtn" href="https://www.youtube.com/results?search_query=${c.yt||encodeURIComponent(c.name+' proper form')}" target="_blank" rel="noopener"><span class="rt">▶</span> Watch real form video <span class="arr">›</span></a>
+      <button class="donebtn" data-done="${i}">${c._done?'✓ Completed — tap to undo':'Mark this exercise done'}</button>
+    </div></div>`;
+}
+function muscleHighlight(c){
+  // simple region-based red highlight on the body map
+  const m=(c.muscle||'').toLowerCase(), p=c.pattern||'';
+  if(c.isCore) return '<rect x="22" y="50" width="16" height="20" rx="4" fill="#F2666B" opacity="0.9"/>';
+  if(/shoulder|delt/.test(m)||p==='vertical_push') return '<circle cx="20" cy="32" r="6" fill="#F2666B" opacity="0.9"/><circle cx="40" cy="32" r="6" fill="#F2666B" opacity="0.9"/>';
+  if(/back|lat|row/.test(m)||/pull/.test(p)) return '<path d="M22 30 Q18 48 22 62 M38 30 Q42 48 38 62" stroke="#F2666B" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.85"/>';
+  if(/chest|pec/.test(m)||p==='horizontal_push') return '<ellipse cx="30" cy="36" rx="12" ry="7" fill="#F2666B" opacity="0.85"/>';
+  if(/bicep/.test(m)) return '<circle cx="16" cy="44" r="4" fill="#F2666B" opacity="0.9"/><circle cx="44" cy="44" r="4" fill="#F2666B" opacity="0.9"/>';
+  if(/tricep/.test(m)) return '<circle cx="15" cy="46" r="4" fill="#F2666B" opacity="0.9"/><circle cx="45" cy="46" r="4" fill="#F2666B" opacity="0.9"/>';
+  if(/glute|ham|hip/.test(m)||/hinge|hip_/.test(p)) return '<ellipse cx="30" cy="66" rx="12" ry="8" fill="#F2666B" opacity="0.85"/>';
+  return '<ellipse cx="30" cy="50" rx="10" ry="14" fill="#F2666B" opacity="0.6"/>';
+}
+function bindToday(){
+  document.querySelectorAll('[data-toggle]').forEach(e=>e.onclick=()=>{const i=e.dataset.toggle;openCard[i]=!openCard[i];renderToday();});
+  document.querySelectorAll('[data-set]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const[i,k]=b.dataset.set.split('-').map(Number);const c=currentSession.items[i];c._sets=c._sets||[];c._sets[k]=!c._sets[k];if(c._sets[k])startTimer(i);renderToday();});
+  document.querySelectorAll('[data-wt]').forEach(inp=>inp.onchange=()=>{currentSession.items[inp.dataset.wt]._weight=+inp.value;autoSave();});
+  document.querySelectorAll('[data-timer]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=b.dataset.timer;timers[i]!=null?stopTimer(i):startTimer(i);});
+  document.querySelectorAll('[data-done]').forEach(b=>b.onclick=ev=>{ev.stopPropagation();const i=b.dataset.done;const c=currentSession.items[i];c._done=!c._done;autoSave();renderToday();});
+}
+function autoSave(){
+  const engaged=currentSession.items.some(it=>it._done||(it._sets||[]).some(Boolean)||it._weight!=null);
+  if(!engaged)return;
+  const today=SS.todayISO();
+  const existing=Object.entries(SS.model.log).find(([id,s])=>s.date===today&&s.type===currentSession._type);
+  const weights={},setsDone={};
+  currentSession.items.forEach(it=>{if(it._weight!=null)weights[it.id]=it._weight;setsDone[it.id]=(it._sets||[]).filter(Boolean).length;});
+  if(existing){
+    const[id]=existing;
+    SS.model.log[id]=Object.assign(SS.model.log[id],{weights,setsDone,exercises:currentSession.items.filter(it=>it._done).map(it=>it.id)});
+    localStorage.setItem('spinestrong_v1',JSON.stringify(SS.model));
+  } else {
+    SS.logSession(currentSession._type,currentSession.items.filter(it=>it._done||(it._sets||[]).some(Boolean)||it._weight!=null));
+  }
+}
+function startTimer(i){const c=currentSession.items[i];if(timers[i]==null)timers[i]=c.rx.rest;clearInterval(intervals[i]);
+  intervals[i]=setInterval(()=>{timers[i]--;const n=document.getElementById('tn-'+i),r=document.getElementById('ring-'+i);if(n)n.textContent=fmt(Math.max(0,timers[i]));if(r)r.setAttribute('stroke-dashoffset',107*(1-timers[i]/c.rx.rest));if(timers[i]<=0){stopTimer(i);if(navigator.vibrate)navigator.vibrate(200);}},1000);renderToday();}
+function stopTimer(i){clearInterval(intervals[i]);delete timers[i];renderToday();}
+
+// ===== WEEK =====
+function weekDays(){const t=SS.todayISO();const d=new Date(t+'T00:00:00');const mo=(d.getDay()+6)%7;const monday=SS.addDays(t,-mo+weekOff*7);return Array.from({length:7},(_,i)=>SS.addDays(monday,i));}
+function renderWeek(){
+  const el=document.getElementById('week');const days=weekDays();const today=SS.todayISO();
+  const plan={};SS.buildPlan(days[0],7).forEach(p=>plan[p.date]=p);
+  if(!weekSel)weekSel=days.find(d=>d===today)||days[0];
+  const train=days.filter(d=>plan[d]&&plan[d].type!=='rest');
+  const done=train.filter(d=>plan[d].status==='done').length;
+  const sportCount=days.filter(d=>plan[d]&&plan[d].sport).length;
+  const skips=SS.recentSkips().length;
+  el.innerHTML=`<header class="weekhead"><div><div class="logo">SpineStrong · Week</div><h1>This Week</h1></div>
+    <div class="weeknav"><button data-w="-1">‹</button><span class="wlabel">${weekOff===0?'Now':(weekOff>0?'+':'')+weekOff+'w'}</span><button data-w="1">›</button></div></header>
+    <div style="text-align:right;margin-top:4px"><span class="gear" data-nav-link="prefs">⚙ Edit my rhythm</span></div>
+    <div class="wsummary"><div class="wstat"><div class="wv">${done}/${train.length}</div><div class="wl">Done</div></div>
+      <div class="wstat"><div class="wv">🔥${weekStreak()}</div><div class="wl">Streak</div></div>
+      <div class="wstat"><div class="wv">${sportCount}</div><div class="wl">Sport</div></div></div>
+    ${skips>0?`<div class="skipnote">${skips} session${skips>1?'s':''} skipped recently — no worries, the plan adjusted forward.</div>`:''}
+    <div class="strip">${days.map(iso=>{const p=plan[iso]||{type:'rest',status:'rest'};const ic=p.sport?SPORT_ICON[p.sport]:(p.status==='done'?'<span class="donebadge">✓</span>':TYPE_ICON[p.type]);
+      return `<div class="scol ${iso===today?'today':''} ${iso===weekSel?'active':''}" data-d="${iso}"><div class="sdn">${['Su','Mo','Tu','We','Th','Fr','Sa'][new Date(iso+'T00:00:00').getDay()][0]}</div><div class="sdd">${new Date(iso+'T00:00:00').getDate()}</div><div class="sicon">${ic}</div></div>`;}).join('')}</div>
+    <div id="wdetail"></div>`;
+  renderWeekDetail(plan);
+  el.querySelectorAll('[data-d]').forEach(c=>c.onclick=()=>{weekSel=c.dataset.d;renderWeek();});
+  el.querySelectorAll('[data-w]').forEach(b=>b.onclick=()=>{weekOff+=+b.dataset.w;weekSel=null;renderWeek();});
+  el.querySelectorAll('[data-nav-link]').forEach(b=>b.onclick=()=>nav(b.dataset.navLink));
+}
+function weekStreak(){return Math.max(1,Object.keys(SS.model.log).length);}
+function renderWeekDetail(plan){
+  const el=document.getElementById('wdetail');const sel=weekSel;const p=plan[sel]||{type:'rest',status:'rest'};const today=SS.todayISO();
+  const dn=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(sel+'T00:00:00').getDay()];
+  const dd=new Date(sel+'T00:00:00').getDate();
+  const sc={done:'done',scheduled:sel===today?'today':'sched',busy:'busy',rest:'rest',skipped:'rest',gap:'rest'}[p.status]||'sched';
+  const stxt={done:'Completed',scheduled:sel===today?'Today':'Scheduled',busy:'Busy',rest:'Rest',skipped:'Skipped',gap:'Missed'}[p.status]||'Scheduled';
+  let body='';
+  if(p.type!=='rest'){
+    const sess=SS.generateSession(p.type);
+    body=sess.items.slice(0,6).map(it=>`<div class="exline"><span class="ed ${it.isCore?'core':''}"></span>${it.name}${it.isCore?' <span style="color:var(--core);font-size:10px">core</span>':''}</div>`).join('')+(sess.items.length>6?`<div class="exline" style="color:var(--muted)">+ ${sess.items.length-6} more</div>`:'');
+  } else { body=`<div style="color:var(--muted);font-size:13px;padding:14px 0;text-align:center;line-height:1.5">${p.sport?SPORT_ICON[p.sport]+' '+p.sport+' day':'Rest & recover'}</div>`; }
+  el.innerHTML=`<div class="detail ${p.sport?'sport':''}">
+    <div class="dhead"><div class="dtitle">${p.sport?SPORT_ICON[p.sport]+' '+p.sport.charAt(0).toUpperCase()+p.sport.slice(1):TYPE_NAME[p.type]}</div><span class="dstatus ${sc}">${stxt}</span></div>
+    <div class="dsub">${dn} ${dd}</div>${body}
+    ${actionsHTML(p,sel,today)}
+    <div class="sportrow"><div class="sl">Sport this day?</div><div class="sporttog">
+      <button class="${p.sport==='squash'?'on':''}" data-sp="squash|${sel}">🎾</button><button class="${p.sport==='golf'?'on':''}" data-sp="golf|${sel}">⛳</button></div></div>
+  </div>`;
+  el.querySelectorAll('[data-sp]').forEach(b=>b.onclick=()=>{const[s,d]=b.dataset.sp.split('|');const cur=(SS.model.overrides[d]||{}).sport;SS.markSport(d,cur===s?null:s);currentSession=null;renderWeek();});
+  el.querySelectorAll('[data-act]').forEach(b=>b.onclick=()=>{const[a,d]=b.dataset.act.split('|');
+    if(a==='skip')SS.skipDay(d); if(a==='busy')SS.markBusy(d); if(a==='unskip')SS.clearOverride(d);
+    if(a==='one1')SS.pushSessionForward(d,1); if(a==='one2')SS.pushSessionForward(d,2);
+    if(a==='chain1')SS.pushChainForward(d,1); if(a==='chain2')SS.pushChainForward(d,2);
+    currentSession=null;renderWeek();});
+}
+function actionsHTML(p,sel,today){
+  if(p.status==='busy'||p.status==='skipped')return `<div class="actions"><button data-act="unskip|${sel}">Undo — put it back</button></div>`;
+  if(p.status==='done')return '';
+  if(p.type==='rest')return `<div class="actions"><button data-act="busy|${sel}">Mark unavailable</button></div>`;
+  // a training day — offer start (if today) + move/push controls + skip
+  let h='<div class="actions">';
+  if(sel===today) h+=`<button class="primary" onclick="nav('today')">Start session ›</button>`;
+  h+=`<button data-act="busy|${sel}">Mark busy</button></div>`;
+  // move controls
+  h+=`<div class="movegrid">
+    <div class="movelabel">Missed or need to move it? Push forward — keeps your rotation order:</div>
+    <div class="moverow"><span class="mt">This session only</span><button data-act="one1|${sel}">+1 day</button><button data-act="one2|${sel}">+2 days</button></div>
+    <div class="moverow"><span class="mt">Whole plan forward</span><button data-act="chain1|${sel}">+1 day</button><button data-act="chain2|${sel}">+2 days</button></div>
+    <button class="skiplink" data-act="skip|${sel}">or skip this one entirely</button>
+  </div>`;
+  return h;
+}
+
+// ===== PROGRESS =====
+function spark(pts,w=260,h=40){if(pts.length<2){return `<svg class="spark" viewBox="0 0 ${w} ${h}"><circle cx="${w}" cy="${h/2}" r="3" fill="var(--accent)"/></svg>`;}
+  const ws=pts.map(p=>p.w),mn=Math.min(...ws),mx=Math.max(...ws),rg=(mx-mn)||1;const P=pts.map((p,i)=>[(i/(pts.length-1))*w,h-5-((p.w-mn)/rg)*(h-10)]);const d=P.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');const l=P[P.length-1];
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${d} L ${w} ${h} L 0 ${h} Z" fill="rgba(212,243,74,0.1)"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><circle cx="${l[0].toFixed(1)}" cy="${l[1].toFixed(1)}" r="3.5" fill="var(--accent)"/></svg>`;}
+function renderProgress(){
+  const el=document.getElementById('progress');const st=SS.stats();const sessions=Object.values(SS.model.log);const n=sessions.length;
+  const byEx={};sessions.forEach(s=>Object.entries(s.weights||{}).forEach(([id,w])=>{(byEx[id]=byEx[id]||[]).push({date:s.date,w});}));
+  Object.values(byEx).forEach(a=>a.sort((x,y)=>x.date.localeCompare(y.date)));
+  const charts=Object.entries(byEx).sort((a,b)=>b[1].length-a[1].length).slice(0,5);
+  const withCore=sessions.length;  // demo: all had core
+  const vol=[['Core',32,'#7DD3FC'],['Shoulders',22,'#D4F34A'],['Back',20,'#D4F34A'],['Legs',14,'#c0a8ff'],['Arms',8,'#ffc98a'],['Chest',4,'#F2666B']];
+  el.innerHTML=`<header><div class="logo">SpineStrong · Progress</div><h1>Your Progress</h1></header>
+    <div class="coach">You've trained <b>${n} times</b> and your lifts are climbing. The strength is real and measurable — <b>that's</b> the win to watch, not the mirror.</div>
+    <div class="hero"><div class="streak"><div style="font-size:16px">🔥</div><div class="big">${weekStreak()}</div><div class="lab">Streak</div></div>
+      <div class="heat"><div class="ht">Last 14 days</div><div class="heatgrid">${heatCells()}</div></div></div>
+    <div class="statgrid"><div class="stat accent"><div class="v">${n}</div><div class="l">Sessions</div></div>
+      <div class="stat"><div class="v">${st.last30}</div><div class="l">Last 30d</div></div>
+      <div class="stat"><div class="v">${st.planAdherence}%</div><div class="l">Adherence</div></div></div>
+    <div class="section-title">Back Protection</div>
+    <div class="backcard"><div class="shield">🛡️</div><div><div class="bt">Disc anchors hit ${withCore}/${n} sessions</div><div class="bs">Your McGill Big 3 + Pallof in every session — spine protected as planned.</div></div></div>
+    <div class="section-title">Where Your Work Goes</div><div class="card">${vol.map(([nm,p,c])=>`<div class="vbar-row"><div class="vname">${nm}</div><div class="vbar-track"><div class="vbar-fill" style="width:${p}%;background:${c}"></div></div><div class="vpct">${p}%</div></div>`).join('')}</div>
+    <div class="section-title">Getting Stronger</div>${charts.length?charts.map(([id,pts])=>{const cur=pts[pts.length-1].w,f=pts[0].w,dl=cur-f;return `<div class="card wchart"><div class="wlabel"><span class="wname">${NAMES[id]||id}</span><span class="wcur">${cur} lb</span></div>${spark(pts)}<div class="wmeta">${pts.length} sessions · ${dl>0?'<span class="up">▲ +'+dl+' lb since you started</span>':'first session'}</div></div>`;}).join(''):'<div class="card" style="text-align:center;color:var(--muted);padding:24px">Log sessions to see strength curves.</div>'}`;
+}
+function heatCells(){const t=SS.todayISO();const dates=new Set(Object.values(SS.model.log).map(s=>s.date));let h='';for(let i=13;i>=0;i--){const d=SS.addDays(t,-i);h+=`<div class="hcell ${dates.has(d)?'train':''}"></div>`;}return h;}
+
+// ===== PREFS =====
+const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];const SPORTS=[['squash','🎾 Squash'],['golf','⛳ Golf'],['other','🏃 Other']];
+function renderPrefs(){
+  const el=document.getElementById('prefs');const p=SS.prefs;const order=[1,2,3,4,5,6,0];
+  el.innerHTML=`<header><div class="logo">SpineStrong · Setup</div><h1>Your Rhythm</h1></header>
+    <div class="section-title">Training Rhythm</div><div class="card">
+      <div class="prow"><div><div class="plbl">Sessions per week</div><div class="pdesc">Your target — the plan aims for this many.</div></div><div class="stepper"><button data-step="spw|-1">−</button><span class="val">${p.sessionsPerWeek}</span><button data-step="spw|1">+</button></div></div>
+      <div class="prow" style="display:block"><div><div class="plbl">Preferred training days</div><div class="pdesc">Which days you'd usually train.</div></div><div class="daypills">${order.map(d=>`<div class="daypill ${(p.preferredDays||[]).includes(d)?'on':''}" data-day="${d}">${DAYS[d][0]}</div>`).join('')}</div></div>
+      <div class="prow"><div><div class="plbl">Min rest between sessions</div><div class="pdesc">Days off kept between training days.</div></div><div class="stepper"><button data-step="rest|-1">−</button><span class="val">${p.minRestDays}</span><button data-step="rest|1">+</button></div></div>
+    </div>
+    <div class="section-title">Recurring Sport Days</div><div class="card">
+      <div>${(p.recurringSports||[]).map((rs,i)=>`<div class="sportline"><select data-si="${i}|sport">${SPORTS.map(s=>`<option value="${s[0]}" ${rs.sport===s[0]?'selected':''}>${s[1]}</option>`).join('')}</select><span class="every">every</span><select data-si="${i}|day">${order.map(d=>`<option value="${d}" ${rs.day===d?'selected':''}>${DAYS[d]}</option>`).join('')}</select><button class="del" data-del="${i}">×</button></div>`).join('')||'<div style="font-size:12px;color:var(--muted);padding:4px 0">No recurring sports yet.</div>'}</div>
+      <button class="addsport" data-add>+ Add a recurring sport</button>
+      <div class="prow" style="margin-top:6px"><div><div class="plbl">Keep day before sport lighter</div><div class="pdesc">No hard training the day before squash or golf.</div></div><div class="switch ${p.noTrainDayBeforeSport?'on':''}" data-tog="dbs"><div class="knob"></div></div></div>
+    </div>
+    <div class="section-title">Coming Back from a Break</div><div class="card">
+      <div class="prow"><div><div class="plbl">Ease back in after time off</div><div class="pdesc">After ~10+ days off, first session comes back lighter (2 sets, ~20% less). Off = straight to normal.</div></div><div class="switch ${p.easeInOnReturn?'on':''}" data-tog="ease"><div class="knob"></div></div></div>
+    </div>
+    <div class="section-title">Taking Time Off</div><div class="card">
+      <button class="pausebtn ${p.paused?'paused':''}" data-pause>${p.paused?'Resume my plan':'Pause my plan'}</button>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4">${p.paused?'Paused. Resume whenever — your progress is saved.':'Need a break? Pause stops the plan until you\u2019re back, no guilt.'}</div>
+    </div>
+    <button class="resetbtn" data-reset>Reset all demo data</button>`;
+  bindPrefs();
+}
+function bindPrefs(){
+  const el=document.getElementById('prefs');
+  el.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{const[k,d]=b.dataset.step.split('|');const p=SS.prefs;if(k==='spw')SS.setPrefs({sessionsPerWeek:Math.max(1,Math.min(6,p.sessionsPerWeek+ +d))});else SS.setPrefs({minRestDays:Math.max(0,Math.min(3,p.minRestDays+ +d))});currentSession=null;renderPrefs();});
+  el.querySelectorAll('[data-day]').forEach(e=>e.onclick=()=>{const d=+e.dataset.day;let days=(SS.prefs.preferredDays||[]).slice();days.includes(d)?days=days.filter(x=>x!==d):days.push(d);SS.setPrefs({preferredDays:days.sort()});currentSession=null;renderPrefs();});
+  el.querySelectorAll('[data-si]').forEach(s=>s.onchange=()=>{const[i,f]=s.dataset.si.split('|');const rs=SS.prefs.recurringSports.slice();rs[+i]=Object.assign({},rs[+i],{[f]:f==='day'?+s.value:s.value});SS.setPrefs({recurringSports:rs});renderPrefs();});
+  el.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{SS.removeRecurringSport(+b.dataset.del);renderPrefs();});
+  el.querySelector('[data-add]').onclick=()=>{SS.addRecurringSport('squash',2);renderPrefs();};
+  el.querySelectorAll('[data-tog]').forEach(t=>t.onclick=()=>{const k=t.dataset.tog;if(k==='dbs')SS.setPrefs({noTrainDayBeforeSport:!SS.prefs.noTrainDayBeforeSport});else SS.setPrefs({easeInOnReturn:!SS.prefs.easeInOnReturn});renderPrefs();});
+  el.querySelector('[data-pause]').onclick=()=>{SS.prefs.paused?SS.resumePlan():SS.pausePlan();currentSession=null;renderPrefs();};
+  el.querySelector('[data-reset]').onclick=()=>{if(confirm('Reset all demo data?')){localStorage.removeItem('ss_demo_seeded');SS.reset();location.reload();}};
+}
+
+renderToday();
+</script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}</script>
 </body>
 </html>
