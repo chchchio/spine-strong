@@ -126,7 +126,7 @@
   .pausebtn{width:100%;border-radius:11px;padding:13px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer;border:1px solid var(--warn);background:transparent;color:var(--warn);}.pausebtn.paused{background:var(--accent);border-color:var(--accent);color:#0F1115;}
   .resetbtn{width:100%;margin-top:10px;background:none;border:none;color:var(--muted);font-size:11px;text-decoration:underline;cursor:pointer;font-family:inherit;}
 
-/* ===== redesign Week/Setup ===== */
+/* redesign */
 
   :root{--bg:#0F1115;--card:#1A1D23;--border:#2A2D35;--muted:#6B7280;--text:#E8EAF0;--accent:#D4F34A;--core:#7DD3FC;--warn:#F59E0B;--sport:#c0a8ff;
     --c-suggest:#7DD3FC;--c-mine:#D4F34A;--c-done:#6B7280;--c-sport:#c0a8ff;}
@@ -519,11 +519,28 @@ const SS = (function(){
   }
 
   // ---- SCHEDULING CONTROLS (override-based) ----
-  function setOverride(date, patch){ model.overrides[date]=Object.assign({},model.overrides[date],patch); save(); }
+  // Each day holds ONE clear intent. Setting a new action clears conflicting flags first,
+  // so overrides can never accumulate into a tangled {pin+skip+busy} state.
+  const INTENT_FLAGS=['skip','busy','pin','movedFrom','oneOff','userPlaced','type'];
+  function clearIntent(date){
+    const o=model.overrides[date]; if(!o) return;
+    INTENT_FLAGS.forEach(f=>delete o[f]);
+    if(Object.keys(o).length===0) delete model.overrides[date];
+  }
+  function setOverride(date, patch){
+    // if this patch carries a training/skip intent, wipe any prior conflicting intent first
+    const carriesIntent = INTENT_FLAGS.some(f=>f in patch);
+    if(carriesIntent){ clearIntent(date); }
+    model.overrides[date]=Object.assign({},model.overrides[date],patch); save();
+  }
   function clearOverride(date){ delete model.overrides[date]; save(); }
   function skipDay(date){ setOverride(date,{skip:true}); }
   function markBusy(date){ setOverride(date,{busy:true}); }
-  function markSport(date,sport){ if(sport) setOverride(date,{sport}); else { const o=model.overrides[date]||{}; delete o.sport; model.overrides[date]=o; save(); } }
+  function markSport(date,sport){
+    // sport is separate from training intent — keep it on its own, but clear training intent
+    if(sport){ clearIntent(date); model.overrides[date]=Object.assign({},model.overrides[date],{sport}); save(); }
+    else { const o=model.overrides[date]||{}; delete o.sport; if(Object.keys(o).length===0)delete model.overrides[date];else model.overrides[date]=o; save(); }
+  }
   function getTypeFor(date){ const pl=buildPlan(date,1); return pl[0]?pl[0].type:null; }
 
   // what session type comes next in the rotation right now
@@ -579,6 +596,10 @@ const SS = (function(){
 
   // PUSH THE WHOLE CHAIN forward N days from `date`: this session and every scheduled
   // session after it (in the upcoming window) each slide forward N days, preserving order.
+  // Clear ALL schedule overrides (skips, moves, busy, pins) but KEEP logged workouts.
+  // Unblocks a tangled plan without losing history.
+  function resetSchedule(){ model.overrides={}; save(); }
+
   function pushChainForward(date, days){
     // capture upcoming scheduled sessions AND their types BEFORE any mutation
     const upcoming=buildPlan(date,28).filter(p=>p.type!=='rest' && p.status!=='done' && p.date>=date);
@@ -652,7 +673,7 @@ const SS = (function(){
            // scheduling controls
            setOverride, clearOverride, skipDay, markBusy, markSport, getTypeFor,
            nextRotationType, insertSession,
-           pushSessionForward, pushChainForward, previewPrefsChange,
+           pushSessionForward, pushChainForward, previewPrefsChange, resetSchedule,
            recentSkips, pausePlan, resumePlan,
            setPrefs, addRecurringSport, removeRecurringSport,
            // layoff
@@ -675,27 +696,10 @@ const NAMES={}; CORPUS_FULL.exercises.forEach(e=>NAMES[e.id]=e.name);
 const CORE_IDS=CORPUS_FULL.exercises.filter(e=>e.region==='core').map(e=>e.id);
 let currentSession=null, openCard={}, weekOff=0, snapshot=null, pendingPatch=null, weekSel=null;
 const timers={}, intervals={};
+function nav(to){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===to));document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.nav===to));if(to==='today')renderToday();if(to==='week')renderWeek();if(to==='progress')renderProgress();if(to==='setup')renderSetup();window.scrollTo(0,0);}
 
-function nav(to){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===to));
-  document.querySelectorAll('.navitem').forEach(n=>n.classList.toggle('active',n.dataset.nav===to));
-  if(to==='today')renderToday(); if(to==='week')renderWeek(); if(to==='progress')renderProgress(); if(to==='setup')renderSetup();
-  window.scrollTo(0,0);
-}
-
-(function seedDemo(){
-  if(localStorage.getItem('ss_demo_seeded')) return;
-  const t=SS.todayISO(), A=SS.addDays;
-  const mk=(d,type,w)=>{const items=Object.entries(w).map(([id,wt])=>({id,_weight:wt,_sets:[true,true,true]}));SS.logSession(type,items,{date:d});};
-  mk(A(t,-16),'upper_a',{chest_supported_row:45,machine_shoulder_press:35,cable_lateral_raise:12,lat_pulldown_wide:60});
-  mk(A(t,-13),'lower',{glute_press_machine:90,lying_leg_curl:50,hip_thrust_machine:95});
-  mk(A(t,-11),'upper_b',{machine_chest_press:50,machine_shoulder_press:35,cable_bicep_curl:50,tricep_pushdown:30});
-  mk(A(t,-9),'upper_a',{chest_supported_row:50,machine_shoulder_press:40,cable_lateral_raise:15,lat_pulldown_wide:65});
-  mk(A(t,-4),'upper_b',{machine_chest_press:55,machine_shoulder_press:40,cable_bicep_curl:55,tricep_pushdown:35});
-  mk(A(t,-2),'upper_a',{chest_supported_row:55,machine_shoulder_press:45,cable_lateral_raise:15,lat_pulldown_wide:70});
-  SS.addRecurringSport('squash',2);
-  localStorage.setItem('ss_demo_seeded','1');
-})();
+(function seedDemo(){if(localStorage.getItem('ss_demo_seeded'))return;const t=SS.todayISO(),A=SS.addDays;const mk=(d,type,w)=>{const items=Object.entries(w).map(([id,wt])=>({id,_weight:wt,_sets:[true,true,true]}));SS.logSession(type,items,{date:d});};
+mk(A(t,-16),'upper_a',{chest_supported_row:45,machine_shoulder_press:35,cable_lateral_raise:12,lat_pulldown_wide:60});mk(A(t,-13),'lower',{glute_press_machine:90,lying_leg_curl:50,hip_thrust_machine:95});mk(A(t,-11),'upper_b',{machine_chest_press:50,machine_shoulder_press:35,cable_bicep_curl:50,tricep_pushdown:30});mk(A(t,-9),'upper_a',{chest_supported_row:50,machine_shoulder_press:40,cable_lateral_raise:15,lat_pulldown_wide:65});mk(A(t,-4),'upper_b',{machine_chest_press:55,machine_shoulder_press:40,cable_bicep_curl:55,tricep_pushdown:35});mk(A(t,-2),'upper_a',{chest_supported_row:55,machine_shoulder_press:45,cable_lateral_raise:15,lat_pulldown_wide:70});SS.addRecurringSport('squash',2);localStorage.setItem('ss_demo_seeded','1');})();
 function getTodaySession(){
   const today=SS.getToday();
   if(!today || today.type==='rest'){ return {rest:true, plan:today}; }
@@ -816,8 +820,6 @@ function heatCells(){const t=SS.todayISO();const dates=new Set(Object.values(SS.
 function spark(pts,w=260,h=40){if(pts.length<2){return `<svg class="spark" viewBox="0 0 ${w} ${h}"><circle cx="${w}" cy="${h/2}" r="3" fill="var(--accent)"/></svg>`;}
   const ws=pts.map(p=>p.w),mn=Math.min(...ws),mx=Math.max(...ws),rg=(mx-mn)||1;const P=pts.map((p,i)=>[(i/(pts.length-1))*w,h-5-((p.w-mn)/rg)*(h-10)]);const d=P.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');const l=P[P.length-1];
   return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><path d="${d} L ${w} ${h} L 0 ${h} Z" fill="rgba(212,243,74,0.1)"/><path d="${d}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/><circle cx="${l[0].toFixed(1)}" cy="${l[1].toFixed(1)}" r="3.5" fill="var(--accent)"/></svg>`;}
-
-
 function colorClass(p){
   if(p.status==='done')return 'done';
   if(p.type!=='rest' && p.source==='user')return 'mine';   // your placed/moved session
@@ -990,6 +992,8 @@ function renderSetup(){
       <div class="prow"><div><div class="plbl">Ease back in after time off</div><div class="pdesc">After ~10+ days off, first session is lighter to protect your back.</div></div><div class="switch ${p.easeInOnReturn?'on':''}" data-tog="ease"><div class="knob"></div></div></div>
       <button class="pausebtn ${p.paused?'paused':''}" data-pause style="margin-top:12px">${p.paused?'Resume my plan':'Pause my plan'}</button>
       <div style="font-size:11.5px;color:var(--muted);margin-top:8px;text-align:center;line-height:1.4">${p.paused?'Paused — resume whenever, your progress is saved.':'Going away? Pause stops the plan until you\u2019re back, no guilt.'}</div>
+      <button class="pausebtn" data-resetsched style="margin-top:14px;border-color:var(--core);color:var(--core)">↺ Reset schedule changes</button>
+      <div style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center;line-height:1.4">Clears all skips, moves &amp; sport days and rebuilds a clean plan from your rhythm. Your logged workouts are kept.</div>
     </div>`;
   el.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>{const[k,d]=b.dataset.st.split('|');
     if(k==='spw')stageChange({sessionsPerWeek:Math.max(1,Math.min(6,((pendingPatch&&pendingPatch.sessionsPerWeek)||p.sessionsPerWeek)+ +d))});
@@ -1000,6 +1004,7 @@ function renderSetup(){
   const add=el.querySelector('[data-add]'); if(add)add.onclick=()=>{SS.addRecurringSport('squash',2);renderSetup();};
   el.querySelectorAll('[data-tog]').forEach(t=>t.onclick=()=>{const k=t.dataset.tog;if(k==='dbs')SS.setPrefs({noTrainDayBeforeSport:!SS.prefs.noTrainDayBeforeSport});else SS.setPrefs({easeInOnReturn:!SS.prefs.easeInOnReturn});renderSetup();});
   const pb=el.querySelector('[data-pause]'); if(pb)pb.onclick=()=>{SS.prefs.paused?SS.resumePlan():SS.pausePlan();renderSetup();};
+  const rs=el.querySelector('[data-resetsched]'); if(rs)rs.onclick=()=>{if(confirm('Reset all schedule changes? Your logged workouts are kept.')){SS.resetSchedule();currentSession=null;showSummary(['Schedule reset — clean plan from your rhythm. Logged workouts kept.']);renderSetup();}};
 }
 function stageChange(patch){pendingPatch=Object.assign({},pendingPatch,patch);renderSetup();}
 function previewBanner(){
@@ -1010,12 +1015,13 @@ function previewBanner(){
     <div class="pvbtns"><button data-pv="cancel">Cancel</button><button data-pv="next" class="primary">Apply from next week</button><button data-pv="now" class="primary">Apply now</button></div></div>`;
 }
 
+
 function weekStreak(){return Math.max(1,Object.keys(SS.model.log).length);}
 
 
 document.getElementById('undobtn').onclick=()=>{if(snapshot){SS.importData(snapshot);snapshot=null;renderWeek();}document.getElementById('summary').classList.remove('show');};
 document.getElementById('backdrop').onclick=closeSheet;
-document.addEventListener('click',e=>{const pv=e.target.closest('[data-pv]');if(!pv)return;const choice=pv.dataset.pv;if(choice==='cancel'){pendingPatch=null;renderSetup();return;}snap();if(choice==='now'||choice==='next'){SS.setPrefs(pendingPatch);pendingPatch=null;renderSetup();showSummary(['Rhythm updated — your week reflects the new pattern.']);}});
+document.addEventListener('click',e=>{const pv=e.target.closest('[data-pv]');if(!pv)return;const choice=pv.dataset.pv;if(choice==='cancel'){pendingPatch=null;renderSetup();return;}snap();if(choice==='now'||choice==='next'){SS.setPrefs(pendingPatch);pendingPatch=null;renderSetup();showSummary(['Rhythm updated.']);}});
 document.querySelectorAll('[data-nav]').forEach(n=>n.onclick=()=>nav(n.dataset.nav));
 
 renderToday();
